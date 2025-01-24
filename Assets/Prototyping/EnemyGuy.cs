@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +9,8 @@ public class EnemyGuy : MonoBehaviour
     public enum State
     {
         Patrol,
-        Chase
+        Chase,
+        Disabled
     }
 
     public State currentState;
@@ -20,17 +22,23 @@ public class EnemyGuy : MonoBehaviour
     public float chaseRange = 10f;
     private int currentWaypointIndex;
 
+    Material enemyMat;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         currentWaypointIndex = Random.Range(0, waypoints.Count);
         currentState = State.Patrol;
+        enemyMat = GetComponent<Material>();
     }
 
     private void Update()
     {
         switch (currentState)
         {
+            case State.Disabled:
+                Disabled();
+                break;
             case State.Patrol:
                 Patrol();
                 break;
@@ -55,7 +63,12 @@ public class EnemyGuy : MonoBehaviour
     {
         agent.SetDestination(player.position);
     }
-
+    private void Disabled()
+    {
+        //agent.isStopped = true;
+        agent.enabled = false;
+        StartCoroutine(Delay());
+    }
     private void CheckTransitions()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
@@ -75,8 +88,10 @@ public class EnemyGuy : MonoBehaviour
     {
         //health -= 
     }
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, bool knockback)
     {
+        //enemyMat.Lerp()
+
 
         Debug.Log("Enemy took " +  damageAmount + " damage");
         health -= damageAmount;
@@ -85,5 +100,24 @@ public class EnemyGuy : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if (knockback)
+        {
+            Vector3 direction = (transform.position - player.transform.position);
+            direction.y = 0;
+            direction.Normalize();
+
+            currentState = State.Disabled;
+            
+            GetComponent<Rigidbody>().AddForce(30 * direction);
+        }
+    }
+
+    private IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(0.8f);
+        agent.enabled = true;
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        currentState = State.Chase;
     }
 }

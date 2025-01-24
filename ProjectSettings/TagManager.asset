@@ -6,11 +6,12 @@ TagManager:
   tags:
   - GrabableObject
   - InteractObject
+  - TheGround
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bunny
   - Water
   - UI
   - 
