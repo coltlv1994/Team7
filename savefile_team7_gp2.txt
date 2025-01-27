@@ -1,0 +1,7 @@
+day=9
+coins=10
+foods=0
+keys=0
+door_1=True
+door_2=False
+door_3=False

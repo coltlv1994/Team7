@@ -1,4 +1,4 @@
-//Indra
+//Indra & Zhengyang
 /*
  * Example of how youd call these methods from another script
  * 
@@ -19,8 +19,13 @@ public class DataManager : MonoBehaviour
     private GameData gameData;
     public static DataManager instance { get; private set; }
 
-    // for testing
-    string savePath = "%USERPROFILE%\\savefile_team7_gp2.txt";
+    private readonly float m_dayTime = 15.0f; // day time by second
+
+    private float m_timer = 0;
+
+    // Note: program will automatically try to find the file under Team7 directory.
+    //       I have not worked out how to use absolute path; but maybe it is good enough.
+    string savePath = "savefile_team7_gp2.txt";
 
     private void Awake()
     {
@@ -32,6 +37,29 @@ public class DataManager : MonoBehaviour
         
         // create game data
         gameData = new GameData();
+
+        if (File.Exists(savePath))
+        {
+            // load from save
+            LoadGame();
+        }
+        else
+        {
+            NewGame();
+        }
+    }
+
+    private void Update()
+    {
+        m_timer += Time.deltaTime;
+        if (m_timer >= m_dayTime)
+        {
+            m_timer = 0;
+            Debug.Log("A new day has passed.");
+            gameData.day += 1;
+            // try autosave
+            SaveGame();
+        }
     }
 
     public void NewGame() 
@@ -67,9 +95,6 @@ public class DataManager : MonoBehaviour
     {
         // TODO: add execption handlers in this function
         Dictionary<string, string> m_inputStatus = new Dictionary<string, string>();
-
-        // For testing purpose
-        // this can be further changed like command line parameters or other method
 
         foreach (string line in File.ReadLines(savePath))
         { 

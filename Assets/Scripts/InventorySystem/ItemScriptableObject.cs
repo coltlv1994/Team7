@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace InventorySystem
 {
-
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Item")]
     public class ItemScriptableObject : ScriptableObject
     {
@@ -12,6 +11,6 @@ namespace InventorySystem
         public bool isStackable; // does the item stack?
         public ItemType itemType; // in case we want to categorize the items
         public bool canBeForSale; // can the item be found for sale
-        public int[] priceRange; // the lower and upper bounds for prices, if the item is for sale
+        public Vector2Int priceRange; // the lower and upper bounds for prices, if the item is for sale
     }
 }

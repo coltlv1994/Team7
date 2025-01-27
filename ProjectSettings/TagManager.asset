@@ -7,6 +7,9 @@ TagManager:
   - GrabableObject
   - InteractObject
   - TheGround
+  - Audio
+  - Note
+  - BunnyRoom
   layers:
   - Default
   - TransparentFX

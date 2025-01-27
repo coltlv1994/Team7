@@ -1203,7 +1203,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_rotationSpeed: 50
   m_moveSpeed: 3
+<<<<<<< Updated upstream
   m_lungeAtPlayerMinDistance: 5
+=======
+  m_lungeAtPlayerMinDistance: 2
+>>>>>>> Stashed changes
   m_lungeSpeed: 5
   xRotation: -90
   raycastToGround: 0.3

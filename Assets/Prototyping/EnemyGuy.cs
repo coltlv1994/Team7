@@ -22,32 +22,40 @@ public class EnemyGuy : MonoBehaviour
     public float chaseRange = 10f;
     private int currentWaypointIndex;
 
-    Material enemyMat;
+    Color originalColor;
+    Renderer renderer;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         currentWaypointIndex = Random.Range(0, waypoints.Count);
         currentState = State.Patrol;
-        enemyMat = GetComponent<Material>();
+        renderer = transform.GetChild(0).GetComponent<Renderer>();
+
+        originalColor = renderer.material.color;
     }
 
     private void Update()
     {
-        switch (currentState)
+        if(agent != null)
         {
-            case State.Disabled:
-                Disabled();
-                break;
-            case State.Patrol:
-                Patrol();
-                break;
-            case State.Chase:
-                Chase();
-                break;
+            switch (currentState)
+            {
+                case State.Disabled:
+                    Disabled();
+                    break;
+                case State.Patrol:
+                    Patrol();
+                    break;
+                case State.Chase:
+                    Chase();
+                    break;
+            }
         }
-
-        CheckTransitions();
+        if (agent != null)
+        {
+            CheckTransitions();
+        }
     }
 
     private void Patrol()
@@ -90,16 +98,16 @@ public class EnemyGuy : MonoBehaviour
     }
     public void TakeDamage(int damageAmount, bool knockback)
     {
-        //enemyMat.Lerp()
-
-
+        originalColor = Color.Lerp(Color.white, Color.red, Mathf.PingPong(Time.time, 1));
+        renderer.material.color = originalColor;
+        //StartCoroutine(HitEffect());
         Debug.Log("Enemy took " +  damageAmount + " damage");
         health -= damageAmount;
 
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
+        //if (health <= 0)
+        //{
+        //    Destroy(gameObject);
+        //}
 
         if (knockback)
         {
@@ -112,7 +120,28 @@ public class EnemyGuy : MonoBehaviour
             GetComponent<Rigidbody>().AddForce(30 * direction);
         }
     }
+    //private IEnumerator HitEffect()
+    //{
+        
+    //    float duration = 0.2f;
+    //    float elapsedTime = 0f;
+    //    while (elapsedTime < duration)
+    //    {
+    //        renderer.material.color = Color.Lerp(originalColor, Color.red, elapsedTime / duration);
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
 
+    //    elapsedTime = 0f;
+    //    while (elapsedTime < duration)
+    //    {
+    //        renderer.material.color = Color.Lerp(Color.red, originalColor, elapsedTime / duration);
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    renderer.material.color = originalColor;
+    //}
     private IEnumerator Delay()
     {
         yield return new WaitForSeconds(0.8f);

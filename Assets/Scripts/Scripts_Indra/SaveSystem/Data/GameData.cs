@@ -24,13 +24,43 @@ public class GameData
 
     public void ParseFromDict(Dictionary<string, string> p_dict)
     {
-        day = Convert.ToUInt32(p_dict["day"]);
-        coins = Convert.ToUInt32(p_dict["coins"]);
-        foods = Convert.ToUInt32(p_dict["foods"]);
-        keys = Convert.ToUInt32(p_dict["keys"]);
-        door_1 = Convert.ToBoolean(p_dict["door_1"]);
-        door_2 = Convert.ToBoolean(p_dict["door_2"]);
-        door_3 = Convert.ToBoolean(p_dict["door_3"]);
+        // Need extra checking in case dictionary has invalid entries due to corrupted save file
+        string outValue;
+
+        if (p_dict.TryGetValue("day", out outValue))
+        {
+            day = Convert.ToUInt32(outValue);
+        }
+
+        if (p_dict.TryGetValue("coins", out outValue))
+        {
+            coins = Convert.ToUInt32(outValue);
+        }
+
+        if (p_dict.TryGetValue("foods", out outValue))
+        {
+            foods = Convert.ToUInt32(outValue);
+        }
+
+        if (p_dict.TryGetValue("keys", out outValue))
+        {
+            keys = Convert.ToUInt32(outValue);
+        }
+
+        if (p_dict.TryGetValue("door_1", out outValue))
+        {
+            door_1 = Convert.ToBoolean(outValue);
+        }
+
+        if (p_dict.TryGetValue("door_2", out outValue))
+        {
+            door_2 = Convert.ToBoolean(outValue);
+        }
+
+        if (p_dict.TryGetValue("door_3", out outValue))
+        {
+            door_3 = Convert.ToBoolean(outValue);
+        }
     }
 
     public Dictionary<string, string> WriteToDict()

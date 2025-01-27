@@ -1,19 +1,22 @@
 // Created by Linus Jernström
+using UnityEngine;
 
 namespace InventorySystem
 {
+    [System.Serializable]
     public class ItemStack
     {
-        public string itemStackName { get; private set; }
-        public ItemScriptableObject itemData { get; private set; }
-        public int currentStackSize;
+        // All items are kept in stacks. This includes single items (which are just in a stack of size 1), and unstackables (which are always stack size 1).
+        
+        [SerializeField] private ItemScriptableObject itemData;
+        [Range(1, 64)] public int currentStackSize;
+        
+        public ItemScriptableObject GetItemData => itemData;
 
         public ItemStack(ItemScriptableObject itemData, int currentStackSize)
         {
             this.itemData = itemData;
             this.currentStackSize = currentStackSize < 1 ? 1 : currentStackSize;
-            
-            itemStackName = itemData.isStackable ? "Stack of " + itemData.itemName + "(s)" : "Single " + itemData.itemName;
         }
     }
 }
