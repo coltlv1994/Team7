@@ -42,6 +42,8 @@ public class FPSController : MonoBehaviour
 
 
     CharacterController characterController;
+    Rigidbody m_rb;
+    public float m_knockbackForce;
 
     #region Handles Pause
     private void Awake()
@@ -57,9 +59,16 @@ public class FPSController : MonoBehaviour
     #endregion
     void Start()
     {
+        m_rb = GetComponent<Rigidbody>();
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
         crouchingMoveObj.transform.localPosition = new Vector3(crouchingMoveObj.transform.localPosition.x, defaultPlayerHeight, crouchingMoveObj.transform.localPosition.z);
+    }
+
+    public void KnockBack()
+    {
+        print("KnocingBack");
+        m_rb.AddForce(transform.forward * m_knockbackForce, ForceMode.Impulse);
     }
 
     void Update()

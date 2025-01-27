@@ -5,12 +5,10 @@ public class InteractBunny : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask = LayerMask.GetMask("Bunny");
     [SerializeField] private int interactRange;
-    private BunnyReceive BunnyReceive;
     private PrototypeTimer timer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        BunnyReceive = GameObject.Find("Bunny").GetComponent<BunnyReceive>();
         timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
     }
 

@@ -98,8 +98,8 @@ public class EnemyGuy : MonoBehaviour
     }
     public void TakeDamage(int damageAmount, bool knockback)
     {
-        originalColor = Color.Lerp(Color.white, Color.red, Mathf.PingPong(Time.time, 1));
-        renderer.material.color = originalColor;
+        //originalColor = Color.Lerp(Color.white, Color.red, Mathf.PingPong(Time.time, 1));
+        //renderer.material.color = originalColor;
         //StartCoroutine(HitEffect());
         Debug.Log("Enemy took " +  damageAmount + " damage");
         health -= damageAmount;

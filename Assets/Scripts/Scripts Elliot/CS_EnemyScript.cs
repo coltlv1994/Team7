@@ -10,11 +10,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     public float m_moveSpeed;
 
     public float m_lungeAtPlayerMinDistance;
-<<<<<<< Updated upstream
-    public float m_lungeSpeed;
-=======
     public float m_lungeForce;
->>>>>>> Stashed changes
     private bool m_lungingAtPlayer;
     private float m_resetLungeTimer;
     int ammountOfLunge = 1;
@@ -93,24 +89,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
         Debug.DrawRay(transform.position, down, Color.red);
         RaycastHit hit;
-<<<<<<< Updated upstream
-        if (Physics.Raycast(transform.position, down, out hit, raycastToGround))
-        {
-            print(hit.collider.name);
-        }
-        else
-        {
-            if(!m_lungingAtPlayer)
-            {
-                print("SettingRotation");
-                transform.eulerAngles = new Vector3(
-                    xRotation,
-                    0,
-                    transform.eulerAngles.z
-                );
-            }
-        }
-=======
         if(!Physics.Raycast(transform.position, down, out hit, raycastToGround))
         {
             if (!m_lungingAtPlayer)
@@ -119,7 +97,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
             }
         }
         else { m_lungingAtPlayer = true;}
->>>>>>> Stashed changes
     }
 
     private void OnTriggerEnter(Collider other)
@@ -161,16 +138,10 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
             }
             else if(distance > 1)
             {
-<<<<<<< Updated upstream
-                transform.LookAt(startPosition, transform.TransformDirection(Vector3.down));
-                //Vector3 newPos = Vector3.MoveTowards(transform.position, startPosition, m_moveSpeed * Time.deltaTime);
-                //transform.position = newPos;
-=======
               transform.LookAt(startPosition);
               transform.Rotate(Vector3.right * -90);
               Vector3 newPos = Vector3.MoveTowards(transform.position, startPosition, m_moveSpeed * Time.deltaTime);
               transform.position = newPos;
->>>>>>> Stashed changes
             }      
     }
 
@@ -178,30 +149,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
       transform.RotateAround(m_pivotObject.transform.position, new Vector3(0, -1, 0), m_rotationSpeed * Time.deltaTime);
     }
-<<<<<<< Updated upstream
-    private void AttackIsActive()
-    {
-        transform.LookAt(m_playerOBJ.transform.position, transform.TransformDirection(Vector3.down));
-        //Vector3 newPos = Vector3.MoveTowards(transform.position, m_playerOBJ.transform.position, m_moveSpeed * Time.deltaTime);
-        //transform.position = newPos;
-
-        //float distance = Vector3.Distance(transform.position, m_playerOBJ.transform.position);
-        //if(distance <= m_lungeAtPlayerMinDistance && !m_lungingAtPlayer)
-        //{
-        //    m_lungingAtPlayer = true;
-        //    if (ammountOfLunge == 1)
-        //    {
-        //        print("Stop1");
-        //        m_rb.AddForce(-transform.forward * m_lungeSpeed, ForceMode.Impulse);
-        //        //m_rb.AddForce(transform.up * m_lungeSpeed, ForceMode.Impulse);
-        //        m_lungingAtPlayer = false;
-        //        print("Stop2");
-        //        m_collider.enabled = false;
-        //        ammountOfLunge--;
-        //    }
-        //    m_collider.enabled = true;
-        //}
-=======
 
     private void AttackIsActive()
     {
@@ -223,7 +170,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
             }
             m_collider.enabled = true;
         }
->>>>>>> Stashed changes
     }
 
     private void DyingIsActive()
