@@ -1,29 +1,42 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CS_EnemyScript : MonoBehaviour //Created by Elliot
+public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being worked on...
 {                                        //This used mixes between transform and rigidbody to move around, this might get changed to only of of them
-    public GameObject m_playerOBJ;
+    [Header("Numbers and Values")]
     public float m_rotationSpeed;
     public float m_moveSpeed;
-    public GameObject m_pivotObject;
-    private Vector3 startPosition;
-    private float walkingBackTime;
+
     public float m_lungeAtPlayerMinDistance;
     public float m_lungeSpeed;
-    private Rigidbody m_rb;
     private bool m_lungingAtPlayer;
     private float m_resetLungeTimer;
+    int ammountOfLunge = 1;
 
-    [SerializeField] CS_PlayerHealthbar m_healthbar;
-    [SerializeField] CS_PlayerMovement m_playerScript;
+    public float xRotation;
+    public float raycastToGround;
+    private float walkingBackTime;
+
     public int m_enemyDamage;
+
+    [Header("Refrences")]
+    public GameObject m_playerOBJ;
+    CS_PlayerMovement m_playerScript;
+    [SerializeField] CS_PlayerHealthbar m_healthbar;
+
+    public GameObject m_pivotObject;
+    private Vector3 startPosition;
+
     public Collider m_collider;
+    private Rigidbody m_rb;
 
-
+    [Header("WhatAIDoing")]
     public EnemyState state = 0;
+
     private void Start()
     {
+        m_playerScript = m_playerOBJ.GetComponent<CS_PlayerMovement>();
         startPosition = transform.position;
         m_rb = GetComponent<Rigidbody>();
         state = EnemyState.IdleState;
@@ -36,8 +49,11 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot
         DieState = 3
     }
 
-    private void Update()
+    public void Update()
     {
+        Vector3 down = transform.TransformDirection(Vector3.down) * 5;
+        Debug.DrawRay(transform.position, down, Color.red);
+        GroundCheck();
         m_resetLungeTimer += Time.deltaTime;
         if(m_resetLungeTimer > 2f)
         {
@@ -66,6 +82,29 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot
         }
     }
 
+    private void GroundCheck()
+    {
+        Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
+        Debug.DrawRay(transform.position, down, Color.red);
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, down, out hit, raycastToGround))
+        {
+            print(hit.collider.name);
+        }
+        else
+        {
+            if(!m_lungingAtPlayer)
+            {
+                print("SettingRotation");
+                transform.eulerAngles = new Vector3(
+                    xRotation,
+                    0,
+                    transform.eulerAngles.z
+                );
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject == m_playerOBJ)
@@ -88,7 +127,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot
 
      private void OnCollisionEnter(Collision collision)
      {
-        if (collision.gameObject.name == "Player") //This will be changed to be expansible
+        if (collision.gameObject.name == "Player") //This will be changed to be expandable
         {
             m_healthbar.TakeDamage(m_enemyDamage);
             m_playerScript.KnockBack();
@@ -105,43 +144,38 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot
             }
             else
             {
-                transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, 0);
-                transform.LookAt(startPosition, transform.up);
-                Vector3 newPos = Vector3.MoveTowards(transform.position, startPosition, m_moveSpeed * Time.deltaTime);
-                transform.position = newPos;
+                transform.LookAt(startPosition, transform.TransformDirection(Vector3.down));
+                //Vector3 newPos = Vector3.MoveTowards(transform.position, startPosition, m_moveSpeed * Time.deltaTime);
+                //transform.position = newPos;
             }      
     }
 
     private void IdleIsActive()
     {
-        transform.RotateAround(m_pivotObject.transform.position, new Vector3(0, 1, 0), m_rotationSpeed * Time.deltaTime);
+      transform.RotateAround(m_pivotObject.transform.position, new Vector3(0, -1, 0), m_rotationSpeed * Time.deltaTime);
     }
-    int ammountOfLunge = 1;
     private void AttackIsActive()
     {
-        float distance = Vector3.Distance(transform.position, m_playerOBJ.transform.position);
-        if(distance <= m_lungeAtPlayerMinDistance && !m_lungingAtPlayer)
-        {
-            if(ammountOfLunge == 1)
-            {
-                print("Stop1");
-                m_lungingAtPlayer = true;
-                m_collider.enabled = true ;
-                m_rb.AddForce(transform.forward * m_lungeSpeed, ForceMode.Impulse);
-                m_rb.AddForce(transform.up * m_lungeSpeed, ForceMode.Impulse);
-                m_lungingAtPlayer = false;
-                print("Stop2");
-                transform.rotation = new Quaternion(0, transform.rotation.y, 0, 0);
-                m_collider.enabled = false;
-                ammountOfLunge--;
-            }
-            m_collider.enabled = true;
-        }
+        transform.LookAt(m_playerOBJ.transform.position, transform.TransformDirection(Vector3.down));
+        //Vector3 newPos = Vector3.MoveTowards(transform.position, m_playerOBJ.transform.position, m_moveSpeed * Time.deltaTime);
+        //transform.position = newPos;
 
-        //transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, 0);
-        transform.LookAt(m_playerOBJ.transform.position, transform.up);
-        Vector3 newPos = Vector3.MoveTowards(transform.position, m_playerOBJ.transform.position, m_moveSpeed * Time.deltaTime);
-        transform.position = newPos;
+        //float distance = Vector3.Distance(transform.position, m_playerOBJ.transform.position);
+        //if(distance <= m_lungeAtPlayerMinDistance && !m_lungingAtPlayer)
+        //{
+        //    m_lungingAtPlayer = true;
+        //    if (ammountOfLunge == 1)
+        //    {
+        //        print("Stop1");
+        //        m_rb.AddForce(-transform.forward * m_lungeSpeed, ForceMode.Impulse);
+        //        //m_rb.AddForce(transform.up * m_lungeSpeed, ForceMode.Impulse);
+        //        m_lungingAtPlayer = false;
+        //        print("Stop2");
+        //        m_collider.enabled = false;
+        //        ammountOfLunge--;
+        //    }
+        //    m_collider.enabled = true;
+        //}
     }
 
     private void DyingIsActive()
