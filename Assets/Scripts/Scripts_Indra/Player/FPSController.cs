@@ -1,9 +1,11 @@
 //Indra
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 //using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
 [RequireComponent(typeof(CharacterController))]
@@ -26,6 +28,15 @@ public class FPSController : MonoBehaviour
     public float crouchingHeight = .5f;
     public float crouchingSpeed = 1;
 
+    [Header("Dashing and Knockback")]
+    //added bt Elliot
+    public float m_knockbackForce;
+    public float m_dashDistance;
+    float m_dashTimer;
+    bool dashing;
+    Rigidbody m_rb;
+    CapsuleCollider capsuleCollider;
+
     [Header("Camera")]
     public Camera playerCamera;
     public float lookSpeed = 2f;
@@ -42,8 +53,6 @@ public class FPSController : MonoBehaviour
 
 
     CharacterController characterController;
-    Rigidbody m_rb;
-    public float m_knockbackForce;
 
     #region Handles Pause
     private void Awake()
@@ -59,6 +68,7 @@ public class FPSController : MonoBehaviour
     #endregion
     void Start()
     {
+        capsuleCollider = GetComponent<CapsuleCollider>();
         m_rb = GetComponent<Rigidbody>();
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
@@ -67,8 +77,11 @@ public class FPSController : MonoBehaviour
 
     public void KnockBack()
     {
-        print("KnocingBack");
-        m_rb.AddForce(transform.forward * m_knockbackForce, ForceMode.Impulse);
+        if(m_rb != null)
+        {
+            print("KnocingBack");
+            m_rb.AddForce(transform.forward * m_knockbackForce, ForceMode.Impulse);
+        }
     }
 
     void Update()
@@ -140,6 +153,22 @@ public class FPSController : MonoBehaviour
 
         #endregion
 
+        #region Handles Dashing
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            dashing = true;
+        }
+
+        if(dashing)
+        {
+            capsuleCollider.enabled = false;
+            m_dashTimer += Time.deltaTime;
+            if (m_dashTimer >= 0.5) { dashing = false; m_dashTimer = 0; capsuleCollider.enabled = true; }
+            Vector3 dashDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
+            characterController.Move(dashDirection * m_dashDistance);
+        }
+        #endregion
     }
     #region Handles Pause cont.
     private void OnGameStateChanged(GameState newState) 

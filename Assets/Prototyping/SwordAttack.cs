@@ -43,9 +43,14 @@ public class SwordAttack : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         EnemyGuy enemy = other.GetComponent<EnemyGuy>();
+        CS_EnemyScript collidedEnemy = other.GetComponent<CS_EnemyScript>();
         if (enemy != null)
         {
             enemy.TakeDamage(damageAmount, true);
+        }
+        if(collidedEnemy != null)
+        {
+            StartCoroutine(collidedEnemy.TakingDamage(20));
         }
 
         if (other.name.Contains("Crate"))
