@@ -6,10 +6,12 @@ public class InteractBunny : MonoBehaviour
     [SerializeField] LayerMask layerMask;
     [SerializeField] private int interactRange;
     private PrototypeTimer timer;
+    public GameObject m_saveWindow;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
+        m_saveWindow.SetActive(false);
     }
 
     // Update is called once per frame
@@ -21,9 +23,11 @@ public class InteractBunny : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask))
             {
-                timer.NewDay();
+                // popup save window
+                m_saveWindow.SetActive(true);
             }
         }
+        timer.UpdateFromManager(Time.deltaTime);
     }
     private void OnTriggerEnter(Collider other) //Pauses timer when entering the Bunny's room
     {
@@ -33,12 +37,24 @@ public class InteractBunny : MonoBehaviour
             timer.timeTicking = false;
         }
     }
-    private void OnTriggerExit(Collider other) //Resumes timer when leaving the Bunny´s room
+    private void OnTriggerExit(Collider other) //Resumes timer when leaving the Bunny's room
     {
         if (other.transform.tag == "BunnyRoom")
         {
             print("I am out in the dungeon");
             timer.timeTicking = true;
         }
+    }
+
+    public void OnClickSaveYes()
+    {
+        timer.SaveGame();
+        m_saveWindow.SetActive(false);
+    }
+
+    public void OnClickSaveNo()
+    {
+        timer.SaveGame();
+        m_saveWindow.SetActive(false);
     }
 }

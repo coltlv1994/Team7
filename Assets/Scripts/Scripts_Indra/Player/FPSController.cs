@@ -76,7 +76,7 @@ public class FPSController : MonoBehaviour
         m_rb = GetComponent<Rigidbody>();
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
-        crouchingMoveObj.transform.localPosition = new Vector3(crouchingMoveObj.transform.localPosition.x, defaultPlayerHeight, crouchingMoveObj.transform.localPosition.z);
+        //crouchingMoveObj.transform.localPosition = new Vector3(crouchingMoveObj.transform.localPosition.x, defaultPlayerHeight, crouchingMoveObj.transform.localPosition.z);
     }
 
     public void KnockBack()
