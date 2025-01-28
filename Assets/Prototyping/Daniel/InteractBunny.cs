@@ -3,7 +3,7 @@ using UnityEngine;
 //Made by Daniel
 public class InteractBunny : MonoBehaviour
 {
-    [SerializeField] LayerMask layerMask = LayerMask.GetMask("Bunny");
+    [SerializeField] LayerMask layerMask;
     [SerializeField] private int interactRange;
     private PrototypeTimer timer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

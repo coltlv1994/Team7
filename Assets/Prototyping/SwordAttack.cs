@@ -50,7 +50,7 @@ public class SwordAttack : MonoBehaviour
         }
         if(collidedEnemy != null)
         {
-            collidedEnemy.TakingDamage(20);
+            StartCoroutine(collidedEnemy.TakingDamage(20));
         }
 
         if (other.name.Contains("Crate"))

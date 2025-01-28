@@ -191,7 +191,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         Destroy(gameObject);
     }
-    public void TakingDamage(int takenDamage)
+    public IEnumerator TakingDamage(int takenDamage)
     {
         state = EnemyState.AttackState;
         foreach (MeshRenderer currentMesh in m_meshrenders)
@@ -201,7 +201,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
             m_enemyCurrentHealth -= takenDamage;
             if (m_enemyCurrentHealth <= 0) { Destroy(gameObject); m_died = true; }
-            //yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.5f);
             if (!m_died)
             {
                 foreach (MeshRenderer currentMesh in m_meshrenders)
