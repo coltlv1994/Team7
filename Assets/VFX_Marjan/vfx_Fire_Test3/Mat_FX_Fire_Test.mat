@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_FX_Fire_Test3 1
-  m_Shader: {fileID: -6465566751694194690, guid: 00bd44e9074fc67489904c22b50e846e, type: 3}
+  m_Name: Mat_FX_Fire_Test
+  m_Shader: {fileID: -6465566751694194690, guid: b2ca4bcf1909ad24a96867d1ad550715, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,8 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: 72687e36cbf0e7041b0916f4c98fdaac, type: 3}
+    - _MainTexture:
+        m_Texture: {fileID: 2800000, guid: 63963439606587947adf60d0411e72a4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -42,14 +42,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bloom: 1.72
-    - _DF_Distance: -0.2
+    - _DisolveAmount: 1.2
+    - _DisolveScale: 2
+    - _DistortionAmount: 0.07
+    - _DistortionScale: 5
     - _QueueControl: 0
     - _QueueOffset: 0
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 8, g: 1.382199, b: 0.4188481, a: 0}
+    - _DisolveSpeed: {r: -0.1, g: -0.5, b: 0, a: 0}
+    - _DistortionSpeed: {r: 0, g: -0.3, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &8640162597791634302
+--- !u!114 &5246693874862772085
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

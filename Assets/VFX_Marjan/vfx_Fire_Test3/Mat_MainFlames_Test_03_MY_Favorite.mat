@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8708464309041633216
+--- !u!114 &-3280780964553584054
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,13 +20,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Water_Blue
-  m_Shader: {fileID: -6465566751694194690, guid: 1d1e431296ae0ba4cb243176a8281d46, type: 3}
+  m_Name: Mat_MainFlames_Test_03_MY_Favorite
+  m_Shader: {fileID: -6465566751694194690, guid: 3438700687204584ea837901718fc407, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -37,12 +37,24 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _NoiceTexture2:
-        m_Texture: {fileID: 2800000, guid: 9c5eab4fc9a937543932baa3993becbd, type: 3}
+    - _Distortion_Mask:
+        m_Texture: {fileID: 2800000, guid: 7defc5c0a42d94a4cb6cc9b2e2d86a26, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _NoiseTexture:
-        m_Texture: {fileID: 2800000, guid: 9c5eab4fc9a937543932baa3993becbd, type: 3}
+    - _Gradient_Texture:
+        m_Texture: {fileID: 2800000, guid: c62102a15acf46c4e869d62222b233e6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Opacity_Mask:
+        m_Texture: {fileID: 2800000, guid: 62f76d2a1c274b54ca4bbffef9a9e2fd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Simple_Noise:
+        m_Texture: {fileID: 2800000, guid: 135b0916b70f7754cb0c4ecf62105da9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Voronoi_Texture:
+        m_Texture: {fileID: 2800000, guid: 26e577291a7cd394cac9617aa4c5a948, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -59,17 +71,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FoamDistance: 0.5
-    - _Metalic: 0
-    - _NoiceScale: 0.033
+    - _Bloom_Intensity: 3
+    - _Depth_Fade_Distance: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Reflaction: 0.0773
-    - _Smoothness: 1
-    - _Transparency: 0.402
-    - _WaveSpeed: 0.0033
+    - _SmoothStep_Opacity_In: 0
+    - _Smooth_Step_Opacity_out: 1
+    - _UV_Distortion_Intensity: -0.19
+    - _UV_Distortion_Opacity_Intensity: 0.05
     m_Colors:
-    - _FoamColor: {r: 1, g: 1, b: 1, a: 0.5372549}
-    - _WaterColor: {r: 0, g: 0.20977783, b: 1, a: 0.13333334}
+    - _Noise_01_Tiling_and_Panner_Speed: {r: 0.6, g: 0.6, b: 0, a: -1}
+    - _Noise_02_Tiling_and_Panner_Speed: {r: 0.6, g: 0.6, b: 0, a: -1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

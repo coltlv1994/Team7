@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_FX_Smoke_Test3
+  m_Name: Mat_FX_Smoke_Test3
   m_Shader: {fileID: -6465566751694194690, guid: e8fb2bdc9118e7941ab4ced4f6abaae5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: 72687e36cbf0e7041b0916f4c98fdaac, type: 3}
+        m_Texture: {fileID: 2800000, guid: 19c58fb8fa8da8047b04c3c86e05a309, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:

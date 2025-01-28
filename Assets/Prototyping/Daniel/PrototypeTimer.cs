@@ -44,7 +44,7 @@ public class PrototypeTimer : MonoBehaviour
     private void TimeOver()
     {
         print("Time Out");
-        SceneManager.LoadScene("Daniel_Test");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void NewDay()

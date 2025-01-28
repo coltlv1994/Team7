@@ -35,25 +35,40 @@ public class FloorTrap : MonoBehaviour
         if (isMoving) // Move the plate towards the target position
         {
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
-            Debug.Log($"FloorTrap: Moving to {targetPosition}");
         }
     }
 
     // Check if the object is valid to trigger the plate
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (IsValidTriggerObject(collision.collider))
+        if (other.CompareTag("Player"))
         {
             objectsOnPlate++;
             PressPlate();
         }
-        Debug.Log($"FloorTrap: {objectsOnPlate} objects on plate");
+        else if (IsValidTriggerObject(other))
+        {
+            objectsOnPlate++;
+            PressPlate();
+        }
     }
     
     // Check if the object is valid to trigger the plate
-    private void OnCollisionExit(Collision collision)
+
+    private void OnTriggerExit(Collider other)
     {
-        if (IsValidTriggerObject(collision.collider))
+        if (other.CompareTag("Player"))
+        {
+            objectsOnPlate--;
+            if (objectsOnPlate <= 0)
+            {
+                objectsOnPlate = 0;
+                ReleasePlate();
+            }
+            return;
+        }
+
+        if (IsValidTriggerObject(other))
         {
             objectsOnPlate--;
             if (objectsOnPlate <= 0)
@@ -62,21 +77,15 @@ public class FloorTrap : MonoBehaviour
                 ReleasePlate();
             }
         }
-        Debug.Log($"FloorTrap: {objectsOnPlate} objects on plate");
     }
 
     // Check if the object is valid to trigger the plate
     private bool IsValidTriggerObject(Collider other)
     {
-        Debug.Log($"FloorTrap: Checking if {other.gameObject.name} is valid trigger object");
-        if ((triggerLayers.value & (1 << other.gameObject.layer)) == 0)
-            return false;
 
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null && rb.mass < minimumWeight)
-            return false;
+        // Only check if the object's layer is in our triggerLayers mask
+        return (triggerLayers.value & (1 << other.gameObject.layer)) != 0;
 
-        return true;
     }
 
     // Press the plate
@@ -89,7 +98,6 @@ public class FloorTrap : MonoBehaviour
         {
             isActivated = true;
             Invoke(nameof(TriggerConnectedTrap), activationDelay);
-            Debug.Log("Plate pressed!");
         }
     }
 
@@ -98,13 +106,11 @@ public class FloorTrap : MonoBehaviour
     {
         isMoving = true;
         targetPosition = startPosition;
-        Debug.Log("Plate released!");
     }
 
     // Trigger the connected trap
     private void TriggerConnectedTrap()
     {
         trapObject.SetActive(true);
-        Debug.Log("Trap activated!");
     }
 }

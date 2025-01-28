@@ -65,6 +65,10 @@ public class FPSController : MonoBehaviour
     {
         GameStateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
     }
+    private void OnGameStateChanged(GameState newState)
+    {
+        enabled = newState == GameState.Play;
+    }
     #endregion
     void Start()
     {
@@ -170,11 +174,5 @@ public class FPSController : MonoBehaviour
         }
         #endregion
     }
-    #region Handles Pause cont.
-    private void OnGameStateChanged(GameState newState) 
-    {
-        enabled = newState == GameState.Play;
-    }
-    #endregion
 }
 

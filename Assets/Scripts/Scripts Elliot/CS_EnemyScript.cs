@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.ProBuilder.MeshOperations;
 using static UnityEngine.GraphicsBuffer;
 
@@ -18,6 +19,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     private bool m_lungingAtPlayer;
     private float m_resetLungeTimer;
     int ammountOfLunge = 1;
+    bool m_takingtheDamage;
 
     [Header("Ground Settings")]
     public float xRotation;
@@ -65,14 +67,17 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         DieState = 3
     }
 
+    bool canGiveDamage = true;
+
     public void Update()
     {
-        Vector3 down = transform.TransformDirection(Vector3.down) * 5;
-        Debug.DrawRay(transform.position, down, Color.red);
+        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
+
         GroundCheck();
-        m_resetLungeTimer += Time.deltaTime;
-        if(m_resetLungeTimer > 2f && m_lungingAtPlayer)
+        if (m_lungingAtPlayer) m_resetLungeTimer += Time.deltaTime;
+        if (m_resetLungeTimer > 5f)
         {
+            canGiveDamage = true;
             m_lungingAtPlayer = false;
             ammountOfLunge = 1;
             m_resetLungeTimer = 0;
@@ -106,12 +111,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         RaycastHit hit;
         if(!Physics.Raycast(transform.position, down, out hit, raycastToGround))
         {
-            if (!m_lungingAtPlayer)
-            {
                 transform.Rotate(Vector3.right * -90);
-            }
         }
-        else { m_lungingAtPlayer = true;}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -120,26 +121,20 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         {
             state = EnemyState.AttackState;
         }
-        else
-        {
-            state = EnemyState.WalkBackState;
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == m_playerOBJ)
+        if (other.gameObject == m_playerOBJ && !m_takingtheDamage)
         {
             state = EnemyState.WalkBackState;
         }
     }
-
      private void OnCollisionEnter(Collision collision)
      {
-        if (collision.gameObject.CompareTag("Player")) //This will be changed to be expandable
+        if (collision.gameObject.CompareTag("Player") && canGiveDamage) //This will be changed to be expandable
         {
-            m_healthbar.TakeDamage(m_enemyDamage);
-            m_playerScript.KnockBack();
+            StartCoroutine(GivingDamage());
         }
      }
 
@@ -191,29 +186,35 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         Destroy(gameObject);
     }
+
     public IEnumerator TakingDamage(int takenDamage)
     {
-        state = EnemyState.AttackState;
+        m_takingtheDamage = true;
         foreach (MeshRenderer currentMesh in m_meshrenders)
         {
             currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1, 0.27f, 0.35f, 0));
         }
 
             m_enemyCurrentHealth -= takenDamage;
-            if (m_enemyCurrentHealth <= 0) { Destroy(gameObject); m_died = true; }
+            if (m_enemyCurrentHealth <= 0) { state = EnemyState.DieState; m_died = true; }
             yield return new WaitForSeconds(0.5f);
             if (!m_died)
             {
                 foreach (MeshRenderer currentMesh in m_meshrenders)
                 {
-                    currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(0.5f, 0.5f, 0.5f, 1));
+                    currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1f, 1f, 1f, 1));
                 }
-                m_sphereCollider.enabled = false;
-                m_sphereCollider.enabled = true;
+            }
+        yield return new WaitForSeconds(5.0f);
+        m_takingtheDamage = false;
+        state = EnemyState.WalkBackState;
+    }
 
-            //transform.LookAt(m_playerOBJ.transform.position);
-            //transform.Rotate(Vector3.right * -90);
-        }
-
+    IEnumerator GivingDamage()
+    {
+        canGiveDamage = false;
+        m_healthbar.TakeDamage(m_enemyDamage);
+        m_playerScript.KnockBack();
+        yield return new WaitForSeconds(5f);
     }
 }
