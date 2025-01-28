@@ -1,35 +1,47 @@
+using System.Collections;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 using static UnityEngine.GraphicsBuffer;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being worked on...
 {                                        //This used mixes between transform and rigidbody to move around, this might get changed to only of of them
-    [Header("Numbers and Values")]
+    [Header("Speed for movement")]
     public float m_rotationSpeed;
     public float m_moveSpeed;
 
+    [Header("Lunge Settings")]
     public float m_lungeAtPlayerMinDistance;
     public float m_lungeForce;
     private bool m_lungingAtPlayer;
     private float m_resetLungeTimer;
     int ammountOfLunge = 1;
 
+    [Header("Ground Settings")]
     public float xRotation;
     public float raycastToGround;
     private float walkingBackTime;
 
+
+    [Header("Combat")]
     public int m_enemyDamage;
+    public int m_enemyCurrentHealth;
+    public int m_enemyMaxHealth;
+    bool m_died;
 
     [Header("Refrences")]
     public GameObject m_playerOBJ;
-    CS_PlayerMovement m_playerScript;
+    FPSController m_playerScript;
     [SerializeField] CS_PlayerHealthbar m_healthbar;
+    MeshRenderer[] m_meshrenders;
 
     public GameObject m_pivotObject;
     private Vector3 startPosition;
 
     public Collider m_collider;
+    private SphereCollider m_sphereCollider;
     private Rigidbody m_rb;
 
     [Header("WhatAIDoing")]
@@ -37,9 +49,12 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
     private void Start()
     {
-        m_playerScript = m_playerOBJ.GetComponent<CS_PlayerMovement>();
+        m_enemyCurrentHealth = m_enemyMaxHealth;
+        m_playerScript = m_playerOBJ.GetComponent<FPSController>();
+        m_meshrenders = GetComponentsInChildren<MeshRenderer>();
         startPosition = transform.position;
         m_rb = GetComponent<Rigidbody>();
+        m_sphereCollider = GetComponent<SphereCollider>();
         state = EnemyState.IdleState;
     }
     public enum EnemyState
@@ -121,7 +136,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
      private void OnCollisionEnter(Collision collision)
      {
-        if (collision.gameObject.name == "Player") //This will be changed to be expandable
+        if (collision.gameObject.CompareTag("Player")) //This will be changed to be expandable
         {
             m_healthbar.TakeDamage(m_enemyDamage);
             m_playerScript.KnockBack();
@@ -147,7 +162,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
     private void IdleIsActive()
     {
-      transform.RotateAround(m_pivotObject.transform.position, new Vector3(0, -1, 0), m_rotationSpeed * Time.deltaTime);
+       transform.RotateAround(m_pivotObject.transform.position, new Vector3(0, -1, 0), m_rotationSpeed * Time.deltaTime);    
     }
 
     private void AttackIsActive()
@@ -176,5 +191,29 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         Destroy(gameObject);
     }
+    public void TakingDamage(int takenDamage)
+    {
+        state = EnemyState.AttackState;
+        foreach (MeshRenderer currentMesh in m_meshrenders)
+        {
+            currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1, 0.27f, 0.35f, 0));
+        }
 
+            m_enemyCurrentHealth -= takenDamage;
+            if (m_enemyCurrentHealth <= 0) { Destroy(gameObject); m_died = true; }
+            //yield return new WaitForSeconds(0.5f);
+            if (!m_died)
+            {
+                foreach (MeshRenderer currentMesh in m_meshrenders)
+                {
+                    currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(0.5f, 0.5f, 0.5f, 1));
+                }
+                m_sphereCollider.enabled = false;
+                m_sphereCollider.enabled = true;
+
+            //transform.LookAt(m_playerOBJ.transform.position);
+            //transform.Rotate(Vector3.right * -90);
+        }
+
+    }
 }
