@@ -25,6 +25,8 @@ public class InteractBunny : MonoBehaviour
             {
                 // popup save window
                 m_saveWindow.SetActive(true);
+                UnityEngine.Cursor.lockState = CursorLockMode.Confined;
+                UnityEngine.Cursor.visible = true;
             }
         }
         timer.UpdateFromManager(Time.deltaTime);
@@ -48,13 +50,17 @@ public class InteractBunny : MonoBehaviour
 
     public void OnClickSaveYes()
     {
-        timer.SaveGame();
+        // This will save game and start a new day
+        timer.NewDay();
         m_saveWindow.SetActive(false);
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
 
     public void OnClickSaveNo()
     {
-        timer.SaveGame();
         m_saveWindow.SetActive(false);
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
 }

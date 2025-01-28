@@ -40,6 +40,8 @@ public class PrototypeTimer : MonoBehaviour
         }
 
         sw.Close();
+
+        Debug.Log("Game Saved.");
     }
 
     public void ReadFromSave()
