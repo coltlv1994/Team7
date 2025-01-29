@@ -8,6 +8,8 @@ public class SwordAttack : MonoBehaviour
     [SerializeField] private int damageAmount = 10;
 
     bool canSwing = true;
+    public bool easyCombat;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -44,14 +46,22 @@ public class SwordAttack : MonoBehaviour
     {
         EnemyGuy enemy = other.GetComponent<EnemyGuy>();
         CS_EnemyScript collidedEnemy = other.GetComponent<CS_EnemyScript>();
+
         if (enemy != null)
         {
             enemy.TakeDamage(damageAmount, true);
         }
-        if(collidedEnemy != null)
+
+        if (easyCombat)
         {
-            StartCoroutine(collidedEnemy.TakingDamage(20));
+            if (collidedEnemy != null) StartCoroutine(collidedEnemy.TakingDamage(damageAmount));
         }
+        else
+        {
+            CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
+            if (other == capsuleCollider) StartCoroutine(collidedEnemy.TakingDamage(damageAmount));
+        }
+        
 
         if (other.name.Contains("Crate"))
         {

@@ -73,7 +73,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
 
-        GroundCheck();
         if (m_lungingAtPlayer) m_resetLungeTimer += Time.deltaTime;
         if (m_resetLungeTimer > 5f)
         {
@@ -101,17 +100,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
                 DyingIsActive();
                 break;
             default: break;
-        }
-    }
-
-    private void GroundCheck()
-    {
-        Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
-        Debug.DrawRay(transform.position, down, Color.red);
-        RaycastHit hit;
-        if(!Physics.Raycast(transform.position, down, out hit, raycastToGround))
-        {
-                transform.Rotate(Vector3.right * -90);
         }
     }
 
