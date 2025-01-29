@@ -4,8 +4,14 @@ using TMPro;
 //Made by Daniel
 public class InteractBunny : MonoBehaviour
 {
+    // Whenever you feel that you need to add some more field to certain
+    // atrributes that need to be save: check GameData class inside PrototypeTimer.
+    // Write the attributes over there, and make sure it will be read/written from/to
+    // the save file on disk.
+    // Should you have any questions, contact Zhengyang
+
     [SerializeField] LayerMask layerMask;
-    [SerializeField] private int interactRange, foodNeeded, food;
+    [SerializeField] private int interactRange, foodNeeded;
     private PrototypeTimer timer;
     public GameObject m_saveWindow;
 
@@ -15,7 +21,7 @@ public class InteractBunny : MonoBehaviour
     {
         timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
         m_saveWindow.SetActive(false);
-        food = 0;
+        timer.gameData.foods = 0;
     }
 
     // Update is called once per frame
@@ -25,7 +31,7 @@ public class InteractBunny : MonoBehaviour
         {
             print("looking for bunny");
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && food == foodNeeded)
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && timer.gameData.foods == foodNeeded)
             {
                 // popup save window
                 m_saveWindow.SetActive(true);
@@ -51,16 +57,16 @@ public class InteractBunny : MonoBehaviour
             timer.timeTicking = true;
 
             //UpdateFood();
-            foodText.text = "Food: " + food.ToString() + "/" + foodNeeded;
+            foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
         }
     }
 
     public void UpdateFood()
     {
-        if (food < foodNeeded)
+        if (timer.gameData.foods < foodNeeded)
         {
-            food++;
-            foodText.text = "Food: " + food.ToString() + "/" + foodNeeded;
+            timer.gameData.foods++;
+            foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
         }
     }
 
@@ -68,12 +74,12 @@ public class InteractBunny : MonoBehaviour
     {
         // This will save game and start a new day
         timer.NewDay();
-        food = 0;
+        timer.gameData.foods = 0;
         m_saveWindow.SetActive(false);
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
 
-        foodText.text = "Food: " + food.ToString() + "/" + foodNeeded;
+        foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
     }
 
     public void OnClickSaveNo()

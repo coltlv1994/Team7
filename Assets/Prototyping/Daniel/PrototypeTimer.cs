@@ -15,7 +15,7 @@ public class PrototypeTimer : MonoBehaviour
     [SerializeField] private TMP_Text timerText, dayText;
 
     // Imported from Indra/Zhengyang's work
-    private GameData gameData;
+    public GameData gameData;
     string savePath = "savefile_team7_gp2.txt";
 
     void Awake()
