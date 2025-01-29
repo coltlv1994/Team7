@@ -1,6 +1,7 @@
 // Created by Linus Jernström
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Interactables
 {
@@ -24,15 +25,15 @@ namespace Interactables
         }
         void OnUnfocus()
         {
-            if (Renderer != null && Outline != null)
+            if (Renderer != null || Outline != null)
             {
                 Material[] currentMaterials = Renderer.sharedMaterials;
                 List<Material> newMaterials = new List<Material>();
-
+    
                 foreach (Material mat in currentMaterials)
                     if (mat != Outline)
                         newMaterials.Add(mat);
-                
+                    
                 Renderer.materials = newMaterials.ToArray();
             }
         }

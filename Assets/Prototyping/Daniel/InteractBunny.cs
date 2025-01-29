@@ -1,17 +1,21 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 //Made by Daniel
 public class InteractBunny : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
-    [SerializeField] private int interactRange;
+    [SerializeField] private int interactRange, foodNeeded, food;
     private PrototypeTimer timer;
     public GameObject m_saveWindow;
+
+    [SerializeField] TextMeshProUGUI foodText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
         m_saveWindow.SetActive(false);
+        food = 0;
     }
 
     // Update is called once per frame
@@ -21,7 +25,7 @@ public class InteractBunny : MonoBehaviour
         {
             print("looking for bunny");
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask))
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && food == foodNeeded)
             {
                 // popup save window
                 m_saveWindow.SetActive(true);
@@ -45,6 +49,18 @@ public class InteractBunny : MonoBehaviour
         {
             print("I am out in the dungeon");
             timer.timeTicking = true;
+
+            //UpdateFood();
+            foodText.text = "Food: " + food.ToString() + "/" + foodNeeded;
+        }
+    }
+
+    public void UpdateFood()
+    {
+        if (food < foodNeeded)
+        {
+            food++;
+            foodText.text = "Food: " + food.ToString() + "/" + foodNeeded;
         }
     }
 
@@ -52,9 +68,12 @@ public class InteractBunny : MonoBehaviour
     {
         // This will save game and start a new day
         timer.NewDay();
+        food = 0;
         m_saveWindow.SetActive(false);
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
+
+        foodText.text = "Food: " + food.ToString() + "/" + foodNeeded;
     }
 
     public void OnClickSaveNo()

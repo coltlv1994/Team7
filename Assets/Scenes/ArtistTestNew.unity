@@ -21636,11 +21636,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3178388784742135019, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 38.47
+      value: 32.1
       objectReference: {fileID: 0}
     - target: {fileID: 3178388784742135019, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.5
+      value: 0.67
       objectReference: {fileID: 0}
     - target: {fileID: 3178388784742135019, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: m_LocalPosition.z
@@ -21676,15 +21676,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: ShapeModule.m_Scale.x
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: ShapeModule.m_Scale.y
-      value: 100
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
+      propertyPath: ShapeModule.m_Scale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 250
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 7557535022718660062, guid: 4f8932feba13bb64f843e07adb4c4d17, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a

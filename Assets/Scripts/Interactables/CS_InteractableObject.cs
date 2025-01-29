@@ -10,7 +10,7 @@ namespace Interactables
 
         [SerializeField] private Material _outline;
         private Renderer _renderer;
-
+        
         public Material Outline => _outline;
         public Renderer Renderer => _renderer ??= GetComponent<Renderer>();
 
