@@ -73,13 +73,19 @@ public class InteractBunny : MonoBehaviour
     public void OnClickSaveYes()
     {
         // This will save game and start a new day
-        timer.NewDay();
+        // First, set food number right
         timer.gameData.foods = 0;
+        foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
+
+        // then save the game
+        timer.NewDay();
+
+        // resume UI status
         m_saveWindow.SetActive(false);
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
 
-        foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
+
     }
 
     public void OnClickSaveNo()
