@@ -18,6 +18,7 @@ public class SwordAttack : MonoBehaviour
     }
     private void Update()
     {
+        if(!easyCombat) EnableCollider();
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("Yo");

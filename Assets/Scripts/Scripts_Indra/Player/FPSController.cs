@@ -30,6 +30,8 @@ public class FPSController : MonoBehaviour
 
     [Header("Dashing and Knockback")]
     //added bt Elliot
+    public float m_worldBottomBoundry = -100;
+    public Vector3 m_respawnLocation;
     public float m_knockbackForce;
     public float m_dashDistance;
     float m_dashTimer;
@@ -72,6 +74,7 @@ public class FPSController : MonoBehaviour
     #endregion
     void Start()
     {
+        m_respawnLocation = transform.position;
         capsuleCollider = GetComponent<CapsuleCollider>();
         m_rb = GetComponent<Rigidbody>();
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -87,9 +90,19 @@ public class FPSController : MonoBehaviour
             m_rb.AddForce(transform.forward * m_knockbackForce, ForceMode.Impulse);
         }
     }
+    private void CheckBounds()
+    {
+        if (transform.position.y < m_worldBottomBoundry)
+        {
+            characterController.enabled = false;
+            transform.position = m_respawnLocation;
+            characterController.enabled = true;
+        }
+    }
 
     void Update()
     {
+        CheckBounds();
         #region Handles Movement
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);

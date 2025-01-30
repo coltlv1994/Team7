@@ -1,7 +1,0 @@
-day=6
-coins=0
-foods=0
-keys=0
-door_1=False
-door_2=False
-door_3=False

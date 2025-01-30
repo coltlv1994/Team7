@@ -26,12 +26,13 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     public float raycastToGround;
     private float walkingBackTime;
 
-
     [Header("Combat")]
     public int m_enemyDamage;
     public int m_enemyCurrentHealth;
     public int m_enemyMaxHealth;
     bool m_died;
+    bool m_canGiveDamage = true;
+    float m_resetStateTimer;
 
     [Header("Refrences")]
     public GameObject m_playerOBJ;
@@ -67,16 +68,21 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         DieState = 3
     }
 
-    bool canGiveDamage = true;
-
     public void Update()
     {
         if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
 
+        m_resetStateTimer += Time.deltaTime;
+        if (m_resetStateTimer >= 1 && state != EnemyState.AttackState)
+        {
+            m_sphereCollider.enabled = false;
+            m_sphereCollider.enabled = true;
+            m_resetStateTimer = 0;
+        }
         if (m_lungingAtPlayer) m_resetLungeTimer += Time.deltaTime;
         if (m_resetLungeTimer > 5f)
         {
-            canGiveDamage = true;
+            m_canGiveDamage = true;
             m_lungingAtPlayer = false;
             ammountOfLunge = 1;
             m_resetLungeTimer = 0;
@@ -120,7 +126,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     }
      private void OnCollisionEnter(Collision collision)
      {
-        if (collision.gameObject.CompareTag("Player") && canGiveDamage) //This will be changed to be expandable
+        if (collision.gameObject.CompareTag("Player") && m_canGiveDamage) //This will be changed to be expandable
         {
             StartCoroutine(GivingDamage());
         }
@@ -200,7 +206,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
     IEnumerator GivingDamage()
     {
-        canGiveDamage = false;
+        m_canGiveDamage = false;
         m_healthbar.TakeDamage(m_enemyDamage);
         m_playerScript.KnockBack();
         yield return new WaitForSeconds(5f);

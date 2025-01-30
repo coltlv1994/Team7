@@ -77,6 +77,11 @@ public class InteractBunny : MonoBehaviour
         timer.gameData.foods = 0;
         foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
 
+        // This function will fail/throw an exception, if save file under game directory is set to
+        // "readonly". When it throws exception, it will block rest of codes in this function from executing,
+        // and the save window may never disappear (but the day count will still +1 every time you click "yes".
+        // To solve this problem, kindly remove the file's "readonly" attribute or delete the file.
+
         // then save the game
         timer.NewDay();
 
@@ -84,8 +89,6 @@ public class InteractBunny : MonoBehaviour
         m_saveWindow.SetActive(false);
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
-
-
     }
 
     public void OnClickSaveNo()
