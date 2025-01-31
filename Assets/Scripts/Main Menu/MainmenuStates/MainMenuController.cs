@@ -5,165 +5,81 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    //States of the main menu
-
-    private MainMenuState currentState;
-
-    public GameObject mainMenu;
-    public GameObject newGame;
-    public GameObject loadGame;
+    public GameObject startMenu;
+    public GameObject newGameConfirmation;
+    public GameObject loadGameConfirmation;
     public GameObject options;
+
+    public string gameStart;
+    public string newGameStart;
+    public string gameLoad;
 
     public Button newGameButton;
     public Button loadGameButton;
     public Button optionsButton;
     public Button exitButton;
 
-    public Button yesNewGameButon;
+    public Button yesNewGameButton;
     public Button noNewGameButton;
 
     public Button yesLoadGameButton;
     public Button noLoadGameButton;
 
-    void Start()
+    public Button backButton;
 
+    private void Start()
     {
         SetState(MainMenuState.MainMenu);
-
 
         newGameButton.onClick.AddListener(() => SetState(MainMenuState.NewGame));
         loadGameButton.onClick.AddListener(() => SetState(MainMenuState.LoadGame));
         optionsButton.onClick.AddListener(() => SetState(MainMenuState.Options));
         exitButton.onClick.AddListener(() => SetState(MainMenuState.Exit));
 
-
-        yesNewGameButon.onClick.AddListener(StartNewGame);
-        noNewGameButton.onClick.AddListener(BackMainMenuFromNewGame);
-
+        yesNewGameButton.onClick.AddListener(StartNewGame);
+        noNewGameButton.onClick.AddListener(BackToMainMenu);
 
         yesLoadGameButton.onClick.AddListener(LoadGame);
-        noNewGameButton.onClick.AddListener(BackMainMenuFromLoadGame);
+        noLoadGameButton.onClick.AddListener(BackToMainMenu);
 
-    }
-
-    void Update()
-    {
-
-        switch (currentState)
-
-        {
-            case MainMenuState.MainMenu:
-                HandleMainMenu();
-                break;
-
-            case MainMenuState.NewGame:
-                HandleNewGame();
-                break;
-
-            case MainMenuState.LoadGame:
-                HandleLoadGame();
-                break;
-
-            case MainMenuState.Options:
-                HandleOptions();
-                break;
-
-            case MainMenuState.Exit:
-                HandleExit();
-                break;
-
-        }
-
+        backButton.onClick.AddListener(BackToMainMenu);
     }
 
     private void SetState(MainMenuState newState)
     {
-        currentState = newState;
+        startMenu.SetActive(newState == MainMenuState.MainMenu);
+        newGameConfirmation.SetActive(newState == MainMenuState.NewGame);
+        loadGameConfirmation.SetActive(newState == MainMenuState.LoadGame);
+        options.SetActive(newState == MainMenuState.Options);
 
-        mainMenu.SetActive(false);
-        newGame.SetActive(false);
-        loadGame.SetActive(false);
-        options.SetActive(false);
-
-        switch (newState)
-
+        if (newState == MainMenuState.Exit)
         {
-            case MainMenuState.MainMenu:
-                mainMenu.SetActive(true);
-                break;
-
-            case MainMenuState.NewGame:
-                newGame.SetActive(true);
-                break;
-
-            case MainMenuState.LoadGame:
-                loadGame.SetActive(true);
-                break;
-
-            case MainMenuState.Options:
-                options.SetActive(true);
-                break;
-
-            case MainMenuState.Exit:
-                Exitgame();
-                break;
-
+            ExitGame();
         }
-
     }
 
-    private void HandleMainMenu()
+    public void Startgame()
     {
-
-    }
-
-    private void HandleNewGame()
-    {
-
-    }
-
-    private void HandleLoadGame()
-    {
-
-    }
-
-    private void HandleOptions()
-    {
-
-    }
-
-    private void HandleExit()
-    {
-
+        SceneManager.LoadScene(gameStart);
     }
 
     private void StartNewGame()
     {
-        SceneManager.LoadScene("");
-    }
-
-    private void BackMainMenuFromNewGame()
-    {
-        SetState(MainMenuState.MainMenu);
+        SceneManager.LoadScene(newGameStart);
     }
 
     private void LoadGame()
-
     {
-
+        //player prefas to load saved scene data
     }
 
-    private void BackMainMenuFromLoadGame()
+    private void BackToMainMenu()
     {
         SetState(MainMenuState.MainMenu);
     }
 
-    private void Exitgame()
-
+    private void ExitGame()
     {
         Application.Quit();
     }
-
-
-
 }
