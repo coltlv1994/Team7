@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,21 +16,32 @@ public class CS_PlayerHealthbar : MonoBehaviour
     private float m_transparency = 0.15f;
     public float m_speedOfFading = 30f;
 
+    [SerializeField] CS_DamageIndicatorUI m_damageIndicator;
+    public CS_RespawnCheck CS_RespawnCheck;
+
     private void Start()
     {
         currentHealth = maxHealth;
         m_colorChanger = m_takingDamageOBJ.GetComponent<RawImage>();
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, Vector3 damagePositon, bool needIndicator)
     {
         currentHealth -= amount;
+
+        if(needIndicator)
+        {
+            m_damageIndicator.DamageLocation = damagePositon;
+            GameObject damageIndicatorOBJ = Instantiate(m_damageIndicator.gameObject, m_damageIndicator.transform.position, m_damageIndicator.transform.rotation, m_damageIndicator.transform.parent);
+            damageIndicatorOBJ.SetActive(true);
+        }
+
         m_takingDamageOBJ.SetActive(true);
         m_Slider.value = currentHealth / maxHealth;
         if (currentHealth <= 0)
         {
             characterController.enabled = false;
-            playerOBJ.transform.position = m_respawnLocation.position;
+            CS_RespawnCheck.Respawn();
             characterController.enabled = true;
             currentHealth = maxHealth;
             print("Player Has Died");
@@ -43,10 +55,10 @@ public class CS_PlayerHealthbar : MonoBehaviour
 
     void Update()
     {
-        TakingDamgeEffect();
+        TakingDamageEffect();
         m_Slider.value = currentHealth;
     }
-    private void TakingDamgeEffect()
+    private void TakingDamageEffect()
     {
         if (m_takingDamageOBJ.activeSelf)
         {

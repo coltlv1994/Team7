@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using System.Collections;
 
@@ -7,11 +6,15 @@ public class PuzzleManager : MonoBehaviour
     [SerializeField] private PuzzleButton[] buttonScript;
     [SerializeField] private int requiredButtons = 1;
     [SerializeField] private Transform door;
-    [SerializeField] int doorMoveHeight = 3;
+    [SerializeField] private int doorMoveHeight = 3;
+    [SerializeField] private int doorOpenSpeed = 3;
+    [SerializeField] private int doorCloseSpeed = 3;
+    [SerializeField] private bool resetOnRelease = false;
 
     private bool puzzleSolved = false;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
+    private Coroutine doorCoroutine;
 
     private void Start()
     {
@@ -24,8 +27,6 @@ public class PuzzleManager : MonoBehaviour
 
     private void Update()
     {
-        if (puzzleSolved) return;
-
         int pressedCount = 0;
 
         foreach (PuzzleButton button in buttonScript)
@@ -35,32 +36,48 @@ public class PuzzleManager : MonoBehaviour
 
         if (pressedCount >= requiredButtons)
         {
-            SolvePuzzle();
+            if (!puzzleSolved) SolvePuzzle();
+        }
+        else if (resetOnRelease && puzzleSolved)
+        {
+            puzzleSolved = false;
+            if (doorCoroutine != null) StopCoroutine(doorCoroutine);
+            doorCoroutine = StartCoroutine(CloseDoor());
         }
     }
 
     private void SolvePuzzle()
     {
         puzzleSolved = true;
-        StartCoroutine(OpenDoor());
+        if (doorCoroutine != null) StopCoroutine(doorCoroutine);
+        doorCoroutine = StartCoroutine(OpenDoor());
     }
 
     private IEnumerator OpenDoor()
     {
         float elapsedTime = 0f;
-
-        while (elapsedTime < 3)
+        while (elapsedTime < doorOpenSpeed)
         {
             if (door != null)
             {
-                door.position = Vector3.Lerp(initialPosition, targetPosition, elapsedTime / 3);
+                door.position = Vector3.Lerp(initialPosition, targetPosition, elapsedTime / doorOpenSpeed);
             }
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+    }
 
-       
-        //door.position = targetPosition;
-        
+    private IEnumerator CloseDoor()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < doorCloseSpeed)
+        {
+            if (door != null)
+            {
+                door.position = Vector3.Lerp(door.position, initialPosition, elapsedTime / doorCloseSpeed);
+            }
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
     }
 }
