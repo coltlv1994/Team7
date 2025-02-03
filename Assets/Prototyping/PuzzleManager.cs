@@ -6,18 +6,27 @@ public class PuzzleManager : MonoBehaviour
     [SerializeField] private PuzzleButton[] buttonScript;
     [SerializeField] private int requiredButtons = 1;
     [SerializeField] private Transform door;
-    [SerializeField] private int doorMoveHeight = 3;
-    [SerializeField] private int doorOpenSpeed = 3;
-    [SerializeField] private int doorCloseSpeed = 3;
+    [SerializeField] private float doorMoveHeight = 3f;
+    [SerializeField] private float doorOpenTime = 3f;
+    [SerializeField] private float doorCloseTime = 3f;
     [SerializeField] private bool resetOnRelease = false;
+    [SerializeField] private Transform cameraPosition;
 
     private bool puzzleSolved = false;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
     private Coroutine doorCoroutine;
+    private CS_DoorCamera _doorCamera;
+
+    //[SerializeField] AudioClip doorSound;
+    [SerializeField] AudioManager audioManager;
 
     private void Start()
     {
+        audioManager = FindFirstObjectByType<AudioManager>();
+        if (!TryGetComponent<CS_DoorCamera>(out _doorCamera))
+            _doorCamera = gameObject.AddComponent<CS_DoorCamera>();
+        
         if (door != null)
         {
             initialPosition = door.position;
@@ -49,6 +58,10 @@ public class PuzzleManager : MonoBehaviour
     private void SolvePuzzle()
     {
         puzzleSolved = true;
+        
+        if(cameraPosition != null && _doorCamera != null)
+            _doorCamera.MoveCameraToPos(cameraPosition);
+            
         if (doorCoroutine != null) StopCoroutine(doorCoroutine);
         doorCoroutine = StartCoroutine(OpenDoor());
     }
@@ -56,28 +69,46 @@ public class PuzzleManager : MonoBehaviour
     private IEnumerator OpenDoor()
     {
         float elapsedTime = 0f;
-        while (elapsedTime < doorOpenSpeed)
+        Vector3 startPosition = door.position;
+
+        audioManager.PlaySFX(door.GetComponent<AudioSource>().clip);
+        Debug.Log(door.GetComponent<AudioSource>().clip.name);
+        while (elapsedTime < doorOpenTime)
         {
             if (door != null)
             {
-                door.position = Vector3.Lerp(initialPosition, targetPosition, elapsedTime / doorOpenSpeed);
+                door.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / doorOpenTime);
             }
             elapsedTime += Time.deltaTime;
             yield return null;
+        }
+        if (door != null)
+        {
+            door.position = targetPosition;
         }
     }
 
     private IEnumerator CloseDoor()
     {
         float elapsedTime = 0f;
-        while (elapsedTime < doorCloseSpeed)
+        Vector3 startPosition = door.position;
+        float remainingDistance = Vector3.Distance(startPosition, initialPosition);
+        float flexibleCloseTime = doorCloseTime * (remainingDistance / doorMoveHeight);
+
+        audioManager.PlaySFX(door.GetComponent<AudioSource>().clip);
+        Debug.Log(door.GetComponent<AudioSource>().clip.name);
+        while (elapsedTime < flexibleCloseTime)
         {
             if (door != null)
             {
-                door.position = Vector3.Lerp(door.position, initialPosition, elapsedTime / doorCloseSpeed);
+                door.position = Vector3.Lerp(startPosition, initialPosition, elapsedTime / flexibleCloseTime);
             }
             elapsedTime += Time.deltaTime;
             yield return null;
+        }
+        if (door != null)
+        {
+            door.position = initialPosition;
         }
     }
 }

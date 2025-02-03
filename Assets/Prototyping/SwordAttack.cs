@@ -43,6 +43,7 @@ public class SwordAttack : MonoBehaviour
         canSwing = true;
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         EnemyGuy enemy = other.GetComponent<EnemyGuy>();
@@ -52,17 +53,26 @@ public class SwordAttack : MonoBehaviour
         {
             enemy.TakeDamage(damageAmount, true);
         }
-
-        if (easyCombat)
-        {
-            if (collidedEnemy != null) StartCoroutine(collidedEnemy.TakingDamage(damageAmount));
+        if(collidedEnemy != null)
+        {   
+            if (easyCombat)
+            {
+                collidedEnemy.TakingDamage(damageAmount);
+                if (collidedEnemy.m_lungingAtPlayer && collidedEnemy.firstHit)
+                {
+                    collidedEnemy.state = CS_EnemyScript.EnemyState.StunStopSate;
+                }
+            }
+            else
+            {
+                CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
+                if (other == capsuleCollider) collidedEnemy.TakingDamage(damageAmount);
+                if (collidedEnemy.m_lungingAtPlayer && collidedEnemy.firstHit)
+                {
+                    collidedEnemy.state = CS_EnemyScript.EnemyState.StunStopSate;
+                }
+            }
         }
-        else
-        {
-            CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
-            if (other == capsuleCollider) StartCoroutine(collidedEnemy.TakingDamage(damageAmount));
-        }
-        
 
         if (other.name.Contains("Crate"))
         {

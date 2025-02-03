@@ -155,18 +155,18 @@ public class FPSController : MonoBehaviour
             crouchingMoveObj.transform.localPosition = new Vector3(crouchingMoveObj.transform.localPosition.x, currentPlayerHeight, crouchingMoveObj.transform.localPosition.z);
         }
 
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            crouchLerpTime += Time.deltaTime * crouchingSpeed;
-            ChangeCrouchingHeight();
-            speed = crouchSpeed;
-        }
-        else if (crouchLerpTime > 0)
-        {
-            crouchLerpTime -= Time.deltaTime * crouchingSpeed;
-            ChangeCrouchingHeight();
-            speed = walkSpeed;
-        }
+        //if (Input.GetKey(KeyCode.LeftControl))
+        //{
+        //    crouchLerpTime += Time.deltaTime * crouchingSpeed;
+        //    ChangeCrouchingHeight();
+        //    speed = crouchSpeed;
+        //}
+        //else if (crouchLerpTime > 0)
+        //{
+        //    crouchLerpTime -= Time.deltaTime * crouchingSpeed;
+        //    ChangeCrouchingHeight();
+        //    speed = walkSpeed;
+        //}
 
         #endregion
 

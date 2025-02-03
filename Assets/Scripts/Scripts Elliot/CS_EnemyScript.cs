@@ -19,8 +19,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     public bool m_lungingAtPlayer;
     private float m_resetLungeTimer;
     int ammountOfLunge = 1;
-    bool m_takingtheDamage;
-    float m_stunStopTimer;
+     bool m_takingtheDamage;
+    public float m_stunStopTimer;
 
     [Header("Ground Settings")]
     public float xRotation;
@@ -34,6 +34,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     bool m_died;
     bool m_canGiveDamage = true;
     float m_resetStateTimer;
+    bool StunStopping;
+    public bool firstHit;
 
     [Header("Refrences")]
     public GameObject m_playerOBJ;
@@ -76,8 +78,14 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
 
+        if(StunStopping && m_stunStopTimer != 0) state = EnemyState.StunStopSate;
+
+        if(m_stunStopTimer >= 0.5f) state = EnemyState.AttackState;
+        if (m_enemyCurrentHealth <= 0) { state = EnemyState.DieState; m_died = true; }
+
+
         m_resetStateTimer += Time.deltaTime;
-        if (m_resetStateTimer >= 1 && state != EnemyState.AttackState)
+        if (m_resetStateTimer >= 1 && state != EnemyState.AttackState && state != EnemyState.StunStopSate)
         {
             m_sphereCollider.enabled = false;
             m_sphereCollider.enabled = true;
@@ -118,7 +126,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
             case EnemyState.StunStopSate:
                 m_stunStopTimer += Time.deltaTime;
-                //StunStopFunction();
+                StunStopFunction();
                 break;
             default: break;
         }
@@ -195,28 +203,32 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         Destroy(gameObject);
     }
-
-    public IEnumerator TakingDamage(int takenDamage)
+    public void TakingDamage(int takenDamage)
     {
-        m_takingtheDamage = true;
-        foreach (MeshRenderer currentMesh in m_meshrenders)
+        if (!firstHit)
+        {
+            firstHit = true;
+            m_enemyCurrentHealth -= takenDamage;
+            StartCoroutine(ChangeColorCoroutine());
+        }
+    }
+    public IEnumerator ChangeColorCoroutine()
+    {
+        foreach (MeshRenderer currentMesh in m_meshrenders) // Turns enemy red
         {
             currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1, 0.27f, 0.35f, 0));
         }
 
-        m_enemyCurrentHealth -= takenDamage;
-        if (m_enemyCurrentHealth <= 0) { state = EnemyState.DieState; m_died = true; }
         yield return new WaitForSeconds(0.5f);
+
         if (!m_died)
         {
-           foreach (MeshRenderer currentMesh in m_meshrenders)
+           foreach (MeshRenderer currentMesh in m_meshrenders) // Turns enemy to normal color
            {
               currentMesh.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1f, 1f, 1f, 1));
            }
         }
-        yield return new WaitForSeconds(5.0f);
-        m_takingtheDamage = false;
-        state = EnemyState.WalkBackState;
+        firstHit = false;
     }
 
     IEnumerator GivingDamage()
@@ -227,18 +239,20 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         yield return new WaitForSeconds(5f);
     }
 
-    //private void StunStopFunction()
-    //{
-    //    m_rb.isKinematic = true;
-    //    if(m_stunStopTimer >= 0.25f)
-    //    {
-    //        m_rb.isKinematic = false;
-            
-    //        print("HowManyTimes");
-    //        m_rb.AddForce(transform.forward * m_lungeForce, ForceMode.Impulse);
-    //        m_rb.AddForce(transform.up * m_lungeForce, ForceMode.Impulse);
-    //        m_stunStopTimer = 0;
-    //        state = EnemyState.AttackState;
-    //    }
-    //}
+    private void StunStopFunction()
+    {
+        StunStopping = true;
+        m_rb.isKinematic = true;
+        if (m_stunStopTimer >= 0.25f && m_lungingAtPlayer)
+        {
+            m_lungingAtPlayer = false;
+            m_rb.isKinematic = false;
+
+            m_rb.AddForce(transform.forward * m_lungeForce, ForceMode.Impulse);
+            m_rb.AddForce(transform.up * m_lungeForce, ForceMode.Impulse);
+            StunStopping = false;
+            m_stunStopTimer = 0;
+            state = EnemyState.AttackState;
+        }
+    }
 }
