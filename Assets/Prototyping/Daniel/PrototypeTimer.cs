@@ -13,6 +13,7 @@ public class PrototypeTimer : MonoBehaviour
     [SerializeField] public float time;
     public bool timeTicking;
     [SerializeField] private TMP_Text timerText, dayText;
+    public GameSettingsPersistent settings;
 
     // Imported from Indra/Zhengyang's work
     public GameData gameData;
@@ -67,7 +68,8 @@ public class PrototypeTimer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (File.Exists(savePath))
+        settings = GameObject.FindGameObjectWithTag("GlobalSettings").GetComponent<GameSettingsPersistent>();
+        if (File.Exists(savePath) && settings.isLoadingSave == true)
         {
             // load from save
             ReadFromSave();

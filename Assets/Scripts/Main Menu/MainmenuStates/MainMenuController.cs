@@ -27,6 +27,8 @@ public class MainMenuController : MonoBehaviour
 
     public Button backButton;
 
+    public GameSettingsPersistent settings;
+
     private void Start()
     {
         SetState(MainMenuState.MainMenu);
@@ -43,6 +45,8 @@ public class MainMenuController : MonoBehaviour
         noLoadGameButton.onClick.AddListener(BackToMainMenu);
 
         backButton.onClick.AddListener(BackToMainMenu);
+
+        settings = GameObject.FindGameObjectWithTag("GlobalSettings").GetComponent<GameSettingsPersistent>();
     }
 
     private void SetState(MainMenuState newState)
@@ -71,6 +75,11 @@ public class MainMenuController : MonoBehaviour
     private void LoadGame()
     {
         //player prefas to load saved scene data
+        settings.isLoadingSave = true; // this value is default to false
+        StartNewGame(); // start new game as normal
+        // in PrototypeTimer.cs, it will check settings.isLoadingSave,
+        // if we found saving file and this is true, the game will load from save
+        // otherwise a new game will start
     }
 
     private void BackToMainMenu()
