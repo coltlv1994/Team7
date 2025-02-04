@@ -8,7 +8,6 @@ public class SwordAttack : MonoBehaviour
     [SerializeField] private int damageAmount = 10;
 
     bool canSwing = true;
-    public bool easyCombat;
 
     private void Start()
     {
@@ -18,7 +17,6 @@ public class SwordAttack : MonoBehaviour
     }
     private void Update()
     {
-        if(!easyCombat) EnableCollider();
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("Yo");
@@ -55,23 +53,12 @@ public class SwordAttack : MonoBehaviour
         }
         if(collidedEnemy != null)
         {   
-            if (easyCombat)
-            {
-                collidedEnemy.TakingDamage(damageAmount);
-                if (collidedEnemy.m_lungingAtPlayer && collidedEnemy.firstHit)
-                {
-                    collidedEnemy.state = CS_EnemyScript.EnemyState.StunStopSate;
-                }
-            }
-            else
-            {
-                CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
-                if (other == capsuleCollider) collidedEnemy.TakingDamage(damageAmount);
-                if (collidedEnemy.m_lungingAtPlayer && collidedEnemy.firstHit)
-                {
-                    collidedEnemy.state = CS_EnemyScript.EnemyState.StunStopSate;
-                }
-            }
+          CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
+          if (other == capsuleCollider) collidedEnemy.TakingDamage(damageAmount);
+          if (collidedEnemy.m_lungingAtPlayer && collidedEnemy.firstHit)
+          {
+             collidedEnemy.state = CS_EnemyScript.EnemyState.StunStopSate;
+          }
         }
 
         if (other.name.Contains("Crate"))

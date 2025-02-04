@@ -15,7 +15,11 @@ public class InteractBunny : MonoBehaviour
     private PrototypeTimer timer;
     public GameObject m_saveWindow;
 
+    Animator bunnyAnimator;
+
     [SerializeField] TextMeshProUGUI foodText;
+
+    /*[System.NonSerialized]*/ public bool increaseTimer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -37,6 +41,8 @@ public class InteractBunny : MonoBehaviour
                 m_saveWindow.SetActive(true);
                 UnityEngine.Cursor.lockState = CursorLockMode.Confined;
                 UnityEngine.Cursor.visible = true;
+
+                bunnyAnimator = hit.transform.gameObject.GetComponentInParent<Animator>();
             }
         }
         timer.UpdateFromManager(Time.deltaTime);
@@ -72,6 +78,8 @@ public class InteractBunny : MonoBehaviour
 
     public void OnClickSaveYes()
     {
+        if (increaseTimer) timer.maxTime += 20;
+
         // This will save game and start a new day
         // First, set food number right
         timer.gameData.foods = 0;
@@ -89,6 +97,9 @@ public class InteractBunny : MonoBehaviour
         m_saveWindow.SetActive(false);
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
+
+        //Animation stuff
+        bunnyAnimator.SetTrigger("Thing");
     }
 
     public void OnClickSaveNo()

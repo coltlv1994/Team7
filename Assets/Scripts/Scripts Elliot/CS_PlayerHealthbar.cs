@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CS_PlayerHealthbar : MonoBehaviour
+public class CS_PlayerHealthbar : MonoBehaviour //Created by Elliot
 {
     [SerializeField] Slider m_Slider;
     public int maxHealth;

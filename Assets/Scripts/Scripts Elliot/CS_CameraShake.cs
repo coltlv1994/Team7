@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using static CS_EnemyScript;
 
@@ -20,6 +21,11 @@ public class CS_CameraShake : MonoBehaviour //Created by Elliot
     [SerializeField] double minValueC;
     [SerializeField] double minValueD;
     [SerializeField] double minValueE, maxValueE;
+
+
+    [Header("TimerShaking")]
+    [SerializeField] PrototypeTimer m_timer;
+    public bool wantShakingWithTimer;
 
 
     void Awake()
@@ -75,7 +81,31 @@ public class CS_CameraShake : MonoBehaviour //Created by Elliot
                 if (m_shakeAmount >= 0.5) m_shakeAmount = 0.5f;
             }
         }
-    
+
+        if(wantShakingWithTimer)
+        {
+            if (m_timer.time > (m_timer.maxTime / 2)) { m_isActiveShake = false; m_shakeAmount = 0f; }
+            else m_isActiveShake = true;
+            if (m_timer.time <= (m_timer.maxTime / 2))
+            {
+                m_shakeAmount++;
+                if (m_shakeAmount >= 0.05) m_shakeAmount = 0.05f;
+            }
+
+            if (m_timer.time <= (m_timer.maxTime / 5))
+            {
+                m_shakeAmount++;
+                if (m_shakeAmount >= 0.1) m_shakeAmount = 0.1f;
+            }
+
+            if (m_timer.time <= (m_timer.maxTime / 10))
+            {
+                m_shakeAmount++;
+                if (m_shakeAmount >= 0.15) m_shakeAmount = 0.15f;
+            }
+        }
+
+
         if (m_isActiveShake)
         {
             transform.localPosition = m_ininitalPos + UnityEngine.Random.insideUnitSphere * m_shakeAmount;

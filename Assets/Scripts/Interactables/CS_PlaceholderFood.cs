@@ -5,6 +5,8 @@ namespace Interactables
 {
     public class CS_PlaceholderFood : CS_InteractableObject
     {
+        [SerializeField] bool isSupaFood;
+
         private InteractBunny interactBunny;
         private void Start()
         {
@@ -14,6 +16,9 @@ namespace Interactables
         {
             interactBunny.UpdateFood();
             Destroy(this.gameObject);
+
+            if (isSupaFood) interactBunny.increaseTimer = true;
+
         }
         public override void OnActivate() { }
         public override void OnDeactivate() { }

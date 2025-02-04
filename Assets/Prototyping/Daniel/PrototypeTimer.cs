@@ -9,8 +9,8 @@ using System.Text;
 //Made by Daniel
 public class PrototypeTimer : MonoBehaviour
 {
-    [SerializeField] uint maxTime = 15;
-    [SerializeField] float time;
+    [SerializeField] public uint maxTime = 15;
+    [SerializeField] public float time;
     public bool timeTicking;
     [SerializeField] private TMP_Text timerText, dayText;
 

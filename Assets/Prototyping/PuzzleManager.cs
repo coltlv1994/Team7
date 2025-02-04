@@ -71,7 +71,8 @@ public class PuzzleManager : MonoBehaviour
         float elapsedTime = 0f;
         Vector3 startPosition = door.position;
 
-        audioManager.PlaySFX(door.GetComponent<AudioSource>().clip);
+        door.GetComponent<AudioSource>().Play();
+        //audioManager.PlaySFX(door.GetComponent<AudioSource>().clip);
         Debug.Log(door.GetComponent<AudioSource>().clip.name);
         while (elapsedTime < doorOpenTime)
         {

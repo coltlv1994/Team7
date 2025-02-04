@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class CS_DangerousTouch : MonoBehaviour
+public class CS_DangerousTouch : MonoBehaviour // Created by Elliot
 {
     public GameObject m_playerOBJ;
     public CS_PlayerHealthbar m_playerHealthbar;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static CS_EnemyScript;
 
-public class CS_RespawnCheck : MonoBehaviour
+public class CS_RespawnCheck : MonoBehaviour //Created by Elliot
 {
     public float m_raycastToGround;
     public List<Vector3> m_positionHistory = new List<Vector3>();
@@ -66,7 +66,6 @@ public class CS_RespawnCheck : MonoBehaviour
 
     private IEnumerator UpdatePositionHistory()
     {
-       print("Updating");
        if (m_positionHistory.Count > m_maxHistoryEntries) m_positionHistory.RemoveAt(0);
 
        m_positionHistory.Add(new Vector3(transform.position.x, transform.position.y, transform.position.z));

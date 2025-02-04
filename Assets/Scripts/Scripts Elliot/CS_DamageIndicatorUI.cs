@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CS_DamageIndicatorUI : MonoBehaviour
+public class CS_DamageIndicatorUI : MonoBehaviour //Created by Elliot
 {
     public Vector3 DamageLocation;
     public Transform playerOBJ;

@@ -103,9 +103,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       propertyPath: m_Name
-      value: CHONK_Bunny
+      value: Fab_CHONK_Bunny
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2223639932434330405, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
@@ -115,6 +116,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4979154797388564021}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 767579419755405093}
   m_SourcePrefab: {fileID: 100100000, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
 --- !u!1 &8422900151575777101 stripped
 GameObject:
@@ -142,6 +146,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.233549, y: 2.4887366, z: 1.6258011}
   m_Center: {x: -0.008265495, y: 1.076463, z: -0.31290054}
+--- !u!95 &767579419755405093
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8422900151575777101}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d83b867ee87a268429667a7c15345d12, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &9200844843796026871 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
