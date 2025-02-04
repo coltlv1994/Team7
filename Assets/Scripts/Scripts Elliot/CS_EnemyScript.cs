@@ -26,6 +26,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     public float xRotation;
     public float raycastToGround;
     private float walkingBackTime;
+    bool m_recovering;
 
     [Header("Combat")]
     public int m_enemyDamage;
@@ -36,6 +37,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     float m_resetStateTimer;
     bool StunStopping;
     public bool firstHit;
+    public bool m_canJuggleEnemy;
+    private bool m_jugglingEnemy;
 
     [Header("Refrences")]
     public GameObject m_playerOBJ;
@@ -56,6 +59,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
     private void Start()
     {
+        m_playerOBJ = GameObject.FindGameObjectWithTag("Player");
+        m_healthbar = GameObject.Find("PlayerHealthBar").GetComponent<CS_PlayerHealthbar>();
         m_enemyCurrentHealth = m_enemyMaxHealth;
         m_playerScript = m_playerOBJ.GetComponent<FPSController>();
         m_meshrenders = GetComponentsInChildren<MeshRenderer>();
@@ -78,7 +83,12 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
 
-        if(StunStopping && m_stunStopTimer != 0) state = EnemyState.StunStopSate;
+        Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
+        Debug.DrawRay(transform.position, down, Color.red);
+        if(m_recovering)RecoveryCoroutine();
+        if(m_canJuggleEnemy) m_jugglingEnemy = false;
+
+        if (StunStopping && m_stunStopTimer != 0) state = EnemyState.StunStopSate;
 
         if(m_stunStopTimer >= 0.5f) state = EnemyState.AttackState;
         if (m_enemyCurrentHealth <= 0) { state = EnemyState.DieState; m_died = true; }
@@ -95,7 +105,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         if (m_resetLungeTimer > 5f)
         {
             m_canGiveDamage = true;
-            m_lungingAtPlayer = false;
+            m_lungingAtPlayer = false; 
             ammountOfLunge = 1;
             m_resetLungeTimer = 0;
         }
@@ -205,11 +215,12 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     }
     public void TakingDamage(int takenDamage)
     {
-        if (!firstHit)
+        if (!firstHit && !m_jugglingEnemy)
         {
             firstHit = true;
             m_enemyCurrentHealth -= takenDamage;
             StartCoroutine(ChangeColorCoroutine());
+            m_recovering = true;
         }
     }
     public IEnumerator ChangeColorCoroutine()
@@ -237,6 +248,24 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         m_healthbar.TakeDamage(m_enemyDamage, this.transform.position, true);
         m_playerScript.KnockBack();
         yield return new WaitForSeconds(5f);
+    }
+
+    private void RecoveryCoroutine()
+    {
+        print("Recovering");
+        Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
+        Debug.DrawRay(transform.position, down, Color.red);
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, down, out hit, raycastToGround));
+        {
+            if (hit.transform == null) { m_jugglingEnemy = true; return; }
+            if (hit.transform.gameObject.CompareTag("TheGround"))
+            {
+                m_jugglingEnemy = false;
+                m_recovering = false;
+            }
+            else m_jugglingEnemy = true;
+        }
     }
 
     private void StunStopFunction()
