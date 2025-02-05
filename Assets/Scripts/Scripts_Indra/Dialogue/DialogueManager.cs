@@ -1,3 +1,5 @@
+// Indra (& Linus)
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,44 +10,46 @@ public class DialogueManager : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
+    public GameObject UI;
+    public Dialogue baseDialogue;
+    public float secondsToShow = 5f;
 
-    private Queue<string> sentences;
+    private string[] _messages => baseDialogue.sentences;
+
+    private PrototypeTimer _timer;
     void Start()
     {
-        sentences = new Queue<string>();
+        _timer = GameObject.FindObjectsByType<PrototypeTimer>(FindObjectsSortMode.None)[0];
+        StartDialogue(1);
     }
 
-    public void StartDialogue(Dialogue dialogue) 
+    public void StartDialogue(int day) 
     {
+        UI.SetActive(true);
         //Debug.Log("Chatting with " + dialogue.npcName);
+        
+        nameText.text = baseDialogue.npcName;
 
-        nameText.text = dialogue.npcName;
+        dialogueText.text = _messages[day - 1];
 
-        sentences.Clear();
-
-        foreach (string sentence in dialogue.sentences) 
-        {
-            sentences.Enqueue(sentence);
-        }
-
-        DisplayNextSentence();
+        StartCoroutine(CloseAfterSeconds());
     }
 
-    public void DisplayNextSentence() 
+    public void StartDialogue(Dialogue dialogue)
     {
-        if (sentences.Count == 0) 
-        {
-            EndDialogue();
-            return;
-        }
-
-        string sentence = sentences.Dequeue();
-        dialogueText.text = sentence;
-        //Debug.Log(sentence);
+        
+    }
+    
+    public IEnumerator CloseAfterSeconds()
+    {
+        yield return new WaitForSeconds(secondsToShow);
+        
+        EndDialogue();
     }
 
     public void EndDialogue() 
     {
+        UI.SetActive(false);
         Debug.Log("Chat end");
     }
 }

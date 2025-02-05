@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using System.Net.NetworkInformation;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,16 +18,16 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     public float m_lungeAtPlayerMinDistance;
     public float m_lungeForce;
     public bool m_lungingAtPlayer;
-    private float m_resetLungeTimer;
+    float m_resetLungeTimer;
     int ammountOfLunge = 1;
-     bool m_takingtheDamage;
+    bool m_takingtheDamage;
     public float m_stunStopTimer;
 
     [Header("Ground Settings")]
     public float xRotation;
     public float raycastToGround;
-    private float walkingBackTime;
-    bool m_recovering;
+    float walkingBackTime;
+    public bool m_recovering;
 
     [Header("Combat")]
     public int m_enemyDamage;
@@ -38,7 +39,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     bool StunStopping;
     public bool firstHit;
     public bool m_canJuggleEnemy;
-    private bool m_jugglingEnemy;
+    public bool m_jugglingEnemy;
 
     [Header("Refrences")]
     public GameObject m_playerOBJ;
@@ -47,12 +48,12 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     MeshRenderer[] m_meshrenders;
 
     public GameObject m_pivotObject;
-    private Vector3 startPosition;
+    Vector3 startPosition;
 
     public Collider m_collider;
-    private SphereCollider m_sphereCollider;
-    private Rigidbody m_rb;
-    private CS_RespawnCheck m_respawnCheck;
+    SphereCollider m_sphereCollider;
+    Rigidbody m_rb;
+    CS_RespawnCheck m_respawnCheck;
 
     [Header("WhatAIDoing")]
     public EnemyState state = 0;
@@ -68,7 +69,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         m_rb = GetComponent<Rigidbody>();
         m_sphereCollider = GetComponent<SphereCollider>();
         m_respawnCheck = m_playerOBJ.GetComponent<CS_RespawnCheck>();  
-        state = EnemyState.IdleState;
+        state = EnemyState.SpawningState;
     }
     public enum EnemyState
     {
@@ -76,16 +77,14 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         WalkBackState = 1,
         AttackState = 2,
         DieState = 3,
-        StunStopSate = 4
+        StunStopSate = 4,
+        SpawningState = 5
     }
 
     public void Update()
     {
         if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
-
-        Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
-        Debug.DrawRay(transform.position, down, Color.red);
-        if(m_recovering)RecoveryCoroutine();
+        if(m_recovering) Recovery();
         if(m_canJuggleEnemy) m_jugglingEnemy = false;
 
         if (StunStopping && m_stunStopTimer != 0) state = EnemyState.StunStopSate;
@@ -111,6 +110,11 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         }
         switch (state)
         {
+            case EnemyState.SpawningState:
+                m_rb.isKinematic = false;
+                SpawningActive();
+                break;
+
             case EnemyState.IdleState:
                 m_rb.isKinematic = false;
                 m_respawnCheck.state = PlayerCombatState.OutsideCombatState;
@@ -175,6 +179,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
             }
             else if(distance > 1)
             {
+              //Walking animation
               transform.LookAt(startPosition);
               transform.Rotate(Vector3.right * -90);
               Vector3 newPos = Vector3.MoveTowards(transform.position, startPosition, m_moveSpeed * Time.deltaTime);
@@ -184,6 +189,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
     private void IdleIsActive()
     {
+        //Walking animation
         transform.RotateAround(m_pivotObject.transform.position, new Vector3(0, -1, 0), m_rotationSpeed * Time.deltaTime);    
     }
 
@@ -200,6 +206,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
             m_lungingAtPlayer = true;
             if (ammountOfLunge == 1)
             {
+                //Do Lunge/Attack Animation
                 m_rb.AddForce(transform.forward * m_lungeForce, ForceMode.Impulse);
                 m_rb.AddForce(-transform.up * m_lungeForce, ForceMode.Impulse);
                 m_collider.enabled = false;
@@ -209,8 +216,15 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         }
     }
 
+    private void SpawningActive()
+    {
+        //Do Spawning Animation
+        state = EnemyState.IdleState;
+    }
+
     private void DyingIsActive()
     {
+        //Do Dying Animation
         Destroy(gameObject);
     }
     public void TakingDamage(int takenDamage)
@@ -219,6 +233,7 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         {
             firstHit = true;
             m_enemyCurrentHealth -= takenDamage;
+            //Do Take Damage Animaton
             StartCoroutine(ChangeColorCoroutine());
             m_recovering = true;
         }
@@ -250,21 +265,22 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         yield return new WaitForSeconds(5f);
     }
 
-    private void RecoveryCoroutine()
+    private void Recovery()
     {
-        print("Recovering");
         Vector3 down = transform.TransformDirection(Vector3.back) * raycastToGround;
-        Debug.DrawRay(transform.position, down, Color.red);
         RaycastHit hit;
-        if(Physics.Raycast(transform.position, down, out hit, raycastToGround));
+        if(Physics.Raycast(transform.position, down, out hit, raycastToGround))
         {
-            if (hit.transform == null) { m_jugglingEnemy = true; return; }
-            if (hit.transform.gameObject.CompareTag("TheGround"))
+            if (hit.collider.transform != null) 
             {
                 m_jugglingEnemy = false;
                 m_recovering = false;
-            }
-            else m_jugglingEnemy = true;
+            } 
+        }
+        else
+        {
+            //Do Wiggle In Air Animation, might be combined with the Getting Hit Animation
+            m_jugglingEnemy = true;
         }
     }
 

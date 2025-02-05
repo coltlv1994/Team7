@@ -12,9 +12,10 @@ public class PrototypeTimer : MonoBehaviour
     [SerializeField] public uint maxTime = 15;
     [SerializeField] public float time;
     public bool timeTicking;
-    [SerializeField] private TMP_Text timerText, dayText;
     public GameSettingsPersistent settings;
-
+    [SerializeField] private TMP_Text timerText, dayText;
+    [SerializeField] private DialogueManager _dialogueManager;
+    
     // Imported from Indra/Zhengyang's work
     public GameData gameData;
     string savePath = "savefile_team7_gp2.txt";
@@ -68,7 +69,10 @@ public class PrototypeTimer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        settings = GameObject.FindGameObjectWithTag("GlobalSettings").GetComponent<GameSettingsPersistent>();
+        settings = GameObject.FindGameObjectWithTag("GlobalSettings")?.GetComponent<GameSettingsPersistent>();
+        if (settings == null)
+            settings = gameObject.AddComponent<GameSettingsPersistent>();
+        
         if (File.Exists(savePath) && settings.isLoadingSave == true)
         {
             // load from save
@@ -114,5 +118,7 @@ public class PrototypeTimer : MonoBehaviour
         gameData.day += 1;
         time = maxTime;
         SaveGame(); // autosave
+        
+        _dialogueManager.StartDialogue(Mathf.CeilToInt(gameData.day));
     }
 }
