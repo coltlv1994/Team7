@@ -84,6 +84,7 @@ public class PrototypeTimer : MonoBehaviour
         {
             // load from save
             ReadFromSave();
+            settings.isLoadingSave = false;
         }
 
         time = maxTime;
@@ -117,6 +118,7 @@ public class PrototypeTimer : MonoBehaviour
     private void TimeOver()
     {
         print("Time Out");
+        settings.isLoadingSave = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
