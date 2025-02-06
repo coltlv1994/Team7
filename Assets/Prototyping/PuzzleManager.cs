@@ -76,6 +76,11 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log(door.GetComponent<AudioSource>().clip.name);
         while (elapsedTime < doorOpenTime)
         {
+            while (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause)
+            {
+                yield return null; //pause //indra
+            }
+
             if (door != null)
             {
                 door.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / doorOpenTime);
@@ -100,6 +105,11 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log(door.GetComponent<AudioSource>().clip.name);
         while (elapsedTime < flexibleCloseTime)
         {
+            while (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause)
+            {
+                yield return null; // hope this works //indra
+            }
+
             if (door != null)
             {
                 door.position = Vector3.Lerp(startPosition, initialPosition, elapsedTime / flexibleCloseTime);

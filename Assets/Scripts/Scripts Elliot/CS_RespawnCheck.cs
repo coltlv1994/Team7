@@ -11,6 +11,7 @@ public class CS_RespawnCheck : MonoBehaviour //Created by Elliot
     [SerializeField] private int m_maxHistoryEntries;
     private bool m_onGround;
     private float m_checkingOnGround;
+    public Transform m_defaultRespawn;
 
     public bool m_trailRespawnCheckpoint;
 
@@ -39,11 +40,20 @@ public class CS_RespawnCheck : MonoBehaviour //Created by Elliot
         }
         else { StopCoroutine(UpdatePositionHistory()); m_checkingOnGround = 0; }
     }
-
+    public bool OnlyRespawnOnce;
     public void Respawn()
     {
-        transform.position = new Vector3(m_positionHistory[0].x, m_positionHistory[0].y, m_positionHistory[0].z);
-        m_positionHistory.RemoveRange(1, m_positionHistory.Count - 1);
+        if(!OnlyRespawnOnce)
+        {
+            if (m_positionHistory.Count <= 0) transform.position = m_defaultRespawn.position;
+            else
+            {
+                print("RespawnCount");
+                transform.position = new Vector3(m_positionHistory[0].x, m_positionHistory[0].y, m_positionHistory[0].z);
+                m_positionHistory.Remove(m_positionHistory[0]);
+                OnlyRespawnOnce = true;
+            }
+        }
     }
 
     private void GroundCheck()

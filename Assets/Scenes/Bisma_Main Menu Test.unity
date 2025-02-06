@@ -518,9 +518,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2896864443509607594, guid: bdd5149c475f5634bbb6e3241d0efc94, type: 3}
+      propertyPath: gameLoad
+      value: Main
+      objectReference: {fileID: 0}
+    - target: {fileID: 2896864443509607594, guid: bdd5149c475f5634bbb6e3241d0efc94, type: 3}
       propertyPath: settings
       value: 
       objectReference: {fileID: 988861114}
+    - target: {fileID: 2896864443509607594, guid: bdd5149c475f5634bbb6e3241d0efc94, type: 3}
+      propertyPath: gameStart
+      value: Main
+      objectReference: {fileID: 0}
+    - target: {fileID: 2896864443509607594, guid: bdd5149c475f5634bbb6e3241d0efc94, type: 3}
+      propertyPath: newGameStart
+      value: Main
+      objectReference: {fileID: 0}
     - target: {fileID: 2944638739202214756, guid: bdd5149c475f5634bbb6e3241d0efc94, type: 3}
       propertyPath: m_Pivot.x
       value: 0

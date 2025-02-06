@@ -11,6 +11,8 @@ TagManager:
   - Note
   - BunnyRoom
   - GlobalSettings
+  - Button
+  - Crate
   layers:
   - Default
   - TransparentFX

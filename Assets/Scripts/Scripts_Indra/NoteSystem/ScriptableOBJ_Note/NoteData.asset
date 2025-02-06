@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 687646ab04c10ce4784cf83d28de6ca2, type: 3}
   m_Name: NoteData
   m_EditorClassIdentifier: 
-  noteText: 'Yo whatsup
+  noteText: 'How did I end up here? Forced to feed the bunny day in and day out.
+    There has to be a way out though...
 
 '
   numberOfPrefabsToCreate: 0

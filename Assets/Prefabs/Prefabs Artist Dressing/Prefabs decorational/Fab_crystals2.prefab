@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1994167354876995909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9203857167963539454}
+  - component: {fileID: 9012207196447117780}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9203857167963539454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994167354876995909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.26534703, y: 0.0015167292, z: 0.9144917, w: 0.30544013}
+  m_LocalPosition: {x: -0.0057, y: 0.0019, z: -0.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1599668874498734719}
+  m_LocalEulerAnglesHint: {x: 7.427, y: -25.187, z: 0}
+--- !u!65 &9012207196447117780
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994167354876995909}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.014052361, y: 0.011190544, z: 0.021542048}
+  m_Center: {x: 0.00052917947, y: 0.00012076413, z: 0.011020712}
 --- !u!1001 &1277213738474380692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54,10 +107,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3d9a08790f243324d9c337572eabac1c, type: 2}
     - target: {fileID: 919132149155446097, guid: 4658e484e1f01334c8d4013e0d81cb2a, type: 3}
       propertyPath: m_Name
-      value: Fbx_crystals2
+      value: Fab_crystals2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4658e484e1f01334c8d4013e0d81cb2a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9203857167963539454}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4658e484e1f01334c8d4013e0d81cb2a, type: 3}
+--- !u!4 &1599668874498734719 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4658e484e1f01334c8d4013e0d81cb2a, type: 3}
+  m_PrefabInstance: {fileID: 1277213738474380692}
+  m_PrefabAsset: {fileID: 0}

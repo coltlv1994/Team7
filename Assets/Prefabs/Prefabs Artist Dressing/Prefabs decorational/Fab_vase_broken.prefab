@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5825016282111413429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7360209892813336712}
+  - component: {fileID: 2390664116812682093}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7360209892813336712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825016282111413429}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.0000011920929, y: -0.0000042021275, z: 0.6408043, w: 0.76770425}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5683585, y: 1.5683583, z: 1.5683587}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3276166774153139914}
+  m_LocalEulerAnglesHint: {x: 7.427, y: -25.187, z: 0}
+--- !u!65 &2390664116812682093
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825016282111413429}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.014052361, y: 0.014568928, z: 0.02463196}
+  m_Center: {x: 0.0005291796, y: 0.00009252135, z: 0.01256567}
 --- !u!1001 &3097897306103001377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,10 +119,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 929e1916793555c448e2b7648423a79d, type: 2}
     - target: {fileID: 919132149155446097, guid: c29fb353fb332744ca7e0bab525f09b5, type: 3}
       propertyPath: m_Name
-      value: Fbx_vase_broken
+      value: Fab_vase_broken
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: c29fb353fb332744ca7e0bab525f09b5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7360209892813336712}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c29fb353fb332744ca7e0bab525f09b5, type: 3}
+--- !u!4 &3276166774153139914 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c29fb353fb332744ca7e0bab525f09b5, type: 3}
+  m_PrefabInstance: {fileID: 3097897306103001377}
+  m_PrefabAsset: {fileID: 0}

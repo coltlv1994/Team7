@@ -42,10 +42,13 @@ public class CS_PlayerHealthbar : MonoBehaviour //Created by Elliot
         {
             characterController.enabled = false;
             CS_RespawnCheck.Respawn();
+            CS_RespawnCheck.OnlyRespawnOnce = false;
             characterController.enabled = true;
             currentHealth = maxHealth;
             print("Player Has Died");
         }
+        else characterController.enabled = true;
+        
     }
 
     public void UpdateFixedHealtBar(int currentValue, int maxValue)

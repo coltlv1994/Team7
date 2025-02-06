@@ -106,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8753530586216978569, guid: e0cfa9b904604eb47ac8d5985f26cc38, type: 3}
       propertyPath: m_enemyMaxHealth
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8753530586216978569, guid: e0cfa9b904604eb47ac8d5985f26cc38, type: 3}
       propertyPath: m_lungeAtPlayerMinDistance

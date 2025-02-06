@@ -12,7 +12,7 @@ public class InteractBunny : MonoBehaviour
 
     [SerializeField] LayerMask layerMask;
     [SerializeField] private int interactRange, foodNeeded;
-    private PrototypeTimer timer;
+    [SerializeField] private PrototypeTimer timer;
     public GameObject m_saveWindow;
 
     Animator bunnyAnimator;
@@ -23,7 +23,7 @@ public class InteractBunny : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
+        //timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
         m_saveWindow.SetActive(false);
         timer.gameData.foods = 0;
     }
@@ -79,7 +79,7 @@ public class InteractBunny : MonoBehaviour
     public void OnClickSaveYes()
     {
         if (increaseTimer) timer.maxTime += 20;
-
+        m_saveWindow.SetActive(false);
         // This will save game and start a new day
         // First, set food number right
         timer.gameData.foods = 0;
@@ -91,10 +91,10 @@ public class InteractBunny : MonoBehaviour
         // To solve this problem, kindly remove the file's "readonly" attribute or delete the file.
 
         // then save the game
-        timer.NewDay();
+        //timer.NewDay();
 
         // resume UI status
-        m_saveWindow.SetActive(false);
+
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
 

@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SC_Indra.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Build1Scene.unity
+    guid: 06c96eb10218cff478ffefbb4f6a593d
+  - enabled: 1
+    path: Assets/Scenes/Bisma_Main Menu Test.unity
+    guid: 402962b98a029774babee01e7f85645d
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 98e9d84945b54b441856bb9556a8c39d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

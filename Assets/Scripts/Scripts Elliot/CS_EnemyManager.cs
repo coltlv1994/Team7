@@ -10,13 +10,14 @@ public class CS_EnemyManager : MonoBehaviour
 {
     public List<GameObject> m_enemyTotal;
     public List<Vector3> m_enemySpawnPoints;
-
+     
     [Header("Move the boxcollider's position and size to set it how you want to it interact")]
     public GameObject m_enemyPrefab;
-    public GameObject BlockageOBJ;
+    public List<GameObject> BlockageOBJ; 
     public int m_enemyAmount;
     public TextMeshProUGUI m_enemiesLeftText;
     public bool m_killAllEnemiesSequence;
+    public PrototypeTimer m_prototypeTimer;
 
     public delegate void EnemyDelegate();
     public static EnemyDelegate OnSpawnEnemies;
@@ -27,6 +28,7 @@ public class CS_EnemyManager : MonoBehaviour
 
     private void OnEnable()
     {
+        m_prototypeTimer = FindAnyObjectByType<PrototypeTimer>();
         OnSpawnEnemies += SpawnEnemies;
         OnDespawnEnemies += DespawnEnemies;
     }
@@ -41,6 +43,7 @@ public class CS_EnemyManager : MonoBehaviour
     {
         if (m_killAllEnemiesSequence) //This might be heavy for the PC, pay attention to FPS counter in unity to see if it is heavy
         {
+            m_prototypeTimer.timeTicking = false;
             m_enemiesLeftText.gameObject.SetActive(true);
             m_enemiesLeftText.text = "Enemies left:" + " " + m_enemyTotal.Count;
 
@@ -61,10 +64,14 @@ public class CS_EnemyManager : MonoBehaviour
         else { m_enemiesLeftText.gameObject.SetActive(false); }
 
         if(m_enemyTotal.Count <= 0 && m_killAllEnemiesSequence) 
-        { 
+        {
+            m_prototypeTimer.timeTicking = true;
             m_killAllEnemiesSequence = false;
             CS_EnemyManager.OnDespawnEnemies.Invoke();
-            BlockageOBJ.SetActive(false);
+            foreach (GameObject doorOBJ in BlockageOBJ)
+            {
+                doorOBJ.SetActive(false);
+            }
             print("Killed All enemies");  
         }
     }
@@ -75,7 +82,10 @@ public class CS_EnemyManager : MonoBehaviour
         {
             m_killAllEnemiesSequence = true;
             this.GetComponent<Collider>().enabled = false;
-            BlockageOBJ.SetActive(true);
+            foreach (GameObject doorOBJ in BlockageOBJ)
+            {
+                doorOBJ.SetActive(true);
+            }
             CS_EnemyManager.OnSpawnEnemies.Invoke();
         }
     }

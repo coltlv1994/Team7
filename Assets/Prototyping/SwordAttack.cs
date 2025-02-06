@@ -17,7 +17,9 @@ public class SwordAttack : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("Yo");
             animator.SetTrigger("Swing");

@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Unity.VisualScripting;
 
 //Made by Daniel
 public class PrototypeTimer : MonoBehaviour
@@ -15,7 +16,7 @@ public class PrototypeTimer : MonoBehaviour
     public GameSettingsPersistent settings;
     [SerializeField] private TMP_Text timerText, dayText;
     [SerializeField] private DialogueManager _dialogueManager;
-    
+
     // Imported from Indra/Zhengyang's work
     public GameData gameData;
     string savePath = "savefile_team7_gp2.txt";
@@ -25,6 +26,12 @@ public class PrototypeTimer : MonoBehaviour
         // create game data
         gameData = new GameData();
     }
+
+    public void PauseTimer(bool pause) //added this bool for pausing timer
+    {
+        timeTicking = !pause;
+    }
+
 
     public void SaveGame()
     {
@@ -86,6 +93,7 @@ public class PrototypeTimer : MonoBehaviour
 
     public void UpdateFromManager(float p_deltaTime)
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
         if (time > 0)
         {
             TimeTick(p_deltaTime);

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 687646ab04c10ce4784cf83d28de6ca2, type: 3}
   m_Name: NoteData2
   m_EditorClassIdentifier: 
-  noteText: yeah its fine what about it
+  noteText: This button seems different. The button won't stay pressed but I can
+    hear it opening something near the entrance...
   numberOfPrefabsToCreate: 0
   spawnPoints: []

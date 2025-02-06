@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &821830989391570828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5839279949422257879}
+  - component: {fileID: 3411933943559317112}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5839279949422257879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821830989391570828}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.000000029802319, y: -0.00000008940696, z: 0.9495313, w: 0.31367218}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0242}
+  m_LocalScale: {x: 1.4351498, y: 1.4350168, z: 1.435016}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1337238792957104128}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3411933943559317112
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821830989391570828}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.028331088, y: 0.027728872, z: 0.09311546}
+  m_Center: {x: 0.00016595819, y: -0.0001148693, z: 0.04680758}
 --- !u!1001 &1514452909111769067
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,10 +119,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 906b0b55cfb5ad04db862c065aa05b25, type: 2}
     - target: {fileID: 919132149155446097, guid: 774f9f78e9c14024c9d23a451b807306, type: 3}
       propertyPath: m_Name
-      value: Fbx_carot_monument
+      value: Fab_carot_monument
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 774f9f78e9c14024c9d23a451b807306, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5839279949422257879}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 774f9f78e9c14024c9d23a451b807306, type: 3}
+--- !u!4 &1337238792957104128 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 774f9f78e9c14024c9d23a451b807306, type: 3}
+  m_PrefabInstance: {fileID: 1514452909111769067}
+  m_PrefabAsset: {fileID: 0}

@@ -757,6 +757,7 @@ MonoBehaviour:
   foodNeeded: 3
   m_saveWindow: {fileID: 0}
   foodText: {fileID: 0}
+  increaseTimer: 0
 --- !u!114 &7048738054269461573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -892,7 +893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionDistance: 6
-  _timeToInteract: 0.5
+  _timeToInteract: 0.2
   _drawDebugRays: 0
   _uiPrefab: {fileID: 6691226434528078203, guid: d9aec78a0e08039469a30ea473ab3730, type: 3}
 --- !u!114 &8289926239198987803
