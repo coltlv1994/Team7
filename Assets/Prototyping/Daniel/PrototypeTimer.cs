@@ -21,6 +21,12 @@ public class PrototypeTimer : MonoBehaviour
     public GameData gameData;
     string savePath = "savefile_team7_gp2.txt";
 
+    public List<GameObject> m_buttonOBJS;
+    public List<GameObject> m_doorsOpened;
+
+    public List<GameObject> m_crateOBJS;
+    public List<Vector3> m_crateLocations;
+
     void Awake()
     {
         // create game data
@@ -31,7 +37,20 @@ public class PrototypeTimer : MonoBehaviour
     {
         timeTicking = !pause;
     }
+    private void OnEnable()
+    {
+        m_buttonOBJS.Clear();
+        m_crateOBJS.Clear();
 
+        foreach (GameObject checkDoor in GameObject.FindGameObjectsWithTag("Button"))
+        {
+            m_buttonOBJS.Add(checkDoor);
+        }
+        foreach (GameObject checkCrate in GameObject.FindGameObjectsWithTag("Crate"))
+        {
+            m_crateOBJS.Add(checkCrate);
+        }
+    }
 
     public void SaveGame()
     {
@@ -48,6 +67,18 @@ public class PrototypeTimer : MonoBehaviour
         }
 
         sw.Close();
+        foreach (GameObject checkDoor in m_buttonOBJS)
+        {
+            if (checkDoor.GetComponent<PuzzleButton>().IsPressed)
+            {
+                m_doorsOpened.Add(checkDoor);
+            }
+        }
+        m_crateLocations.Clear();
+        foreach (GameObject checkCrate in m_crateOBJS)
+        {
+            m_crateLocations.Add(checkCrate.transform.position);
+        }
 
         Debug.Log("Game Saved.");
     }
@@ -68,6 +99,17 @@ public class PrototypeTimer : MonoBehaviour
 
             string[] fields = line.Split("=");
             m_inputStatus[fields[0]] = fields[1]; // read it and cover default value
+        }
+
+        foreach (GameObject checkDoor in m_doorsOpened)
+        {
+            checkDoor.GetComponent<PuzzleButton>().IsPressed = true;
+        }
+        int currentCrateCheck = 0;
+        foreach (GameObject checkCrate in m_crateOBJS)
+        {
+            checkCrate.transform.position = m_crateLocations[currentCrateCheck];
+            currentCrateCheck++;
         }
 
         gameData.ParseFromDict(m_inputStatus);
