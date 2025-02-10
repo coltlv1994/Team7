@@ -14,7 +14,7 @@ public class InteractBunny : MonoBehaviour
     // Should you have any questions, contact Zhengyang
 
     [SerializeField] LayerMask layerMask;
-    [SerializeField] private int interactRange, foodNeeded;
+    [SerializeField] private uint interactRange, foodNeeded;
     [SerializeField] public PrototypeTimer timer; //made this public for max cap /indra
     public GameObject m_saveWindow;
 
@@ -46,7 +46,7 @@ public class InteractBunny : MonoBehaviour
         {
             print("looking for bunny");
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && timer.gameData.foods == foodNeeded)
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && timer.gameData.foods >= foodNeeded)
             {
                 // popup save window
                 m_saveWindow.SetActive(true);
@@ -93,7 +93,7 @@ public class InteractBunny : MonoBehaviour
         m_saveWindow.SetActive(false);
         // This will save game and start a new day
         // First, set food number right
-        timer.gameData.foods = 0;
+        timer.gameData.foods -= foodNeeded;
         foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
 
         // This function will fail/throw an exception, if save file under game directory is set to
