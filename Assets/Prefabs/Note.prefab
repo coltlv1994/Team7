@@ -121,11 +121,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518a3e39bc0bbaa49a31d8fadebd3e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _outline: {fileID: 0}
   closeKey: 102
   player: {fileID: 0}
   noteCanvas: {fileID: 0}
-  noteTextAreaUI: {fileID: 0}
-  noteText: super cool note that enhances the narrative!!!
+  noteTextUI: {fileID: 0}
+  noteData: {fileID: 0}
+  protoTimer: {fileID: 0}
   openEvent:
     m_PersistentCalls:
       m_Calls:
@@ -141,3 +143,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  noteSound: {fileID: 8300000, guid: d54920efd9201194b98b92bc1244df10, type: 3}

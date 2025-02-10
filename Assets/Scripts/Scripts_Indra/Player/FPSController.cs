@@ -16,17 +16,17 @@ public class FPSController : MonoBehaviour
     public float walkSpeed = 6f;
     public float runSpeed = 12f;
     public float crouchSpeed = 3f;
-    float speed = 6f;
+    //float speed = 6f;
 
     [Header("Jumping")]
     public float jumpPower = 7f;
     public float gravity = 10f;
 
-    [Header("Crouching")]
-    public GameObject crouchingMoveObj;
-    public float defaultPlayerHeight = 1;
-    public float crouchingHeight = .5f;
-    public float crouchingSpeed = 1;
+    //[Header("Crouching")]
+    //public GameObject crouchingMoveObj;
+    //public float defaultPlayerHeight = 1;
+    //public float crouchingHeight = .5f;
+    //public float crouchingSpeed = 1;
 
     [Header("Dashing and Knockback")]
     //added bt Elliot
@@ -109,10 +109,32 @@ public class FPSController : MonoBehaviour
 
         // Press Left Shift to run
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
+
+
         float curSpeedX = canMove ? (crouchLerpTime <= 0 ? (isRunning ? runSpeed : walkSpeed) : crouchSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (crouchLerpTime <= 0 ? (isRunning ? runSpeed : walkSpeed) : crouchSpeed) * Input.GetAxis("Horizontal") : 0;
         float movementDirectionY = moveDirection.y;
-        moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+        Vector3 move = (forward * curSpeedX) + (right * curSpeedY);
+        if (move.magnitude > 1)
+        {
+            move.Normalize(); // diagonal speed fix
+            move *= (isRunning ? runSpeed : walkSpeed); // applies fix
+        }
+
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) //this is dumb but now player doesnt retain momentum when key is released
+        {
+            Stop(); //The reason its wasd is because I used anyKey and then if u pushed something that wasnt wasd you would go forward a little. This is still dumb
+        }
+
+
+        void Stop() //applies dummy code
+        {
+            move = Vector3.zero;
+        }
+
+        moveDirection = move;
+
 
         #endregion
 
@@ -140,20 +162,20 @@ public class FPSController : MonoBehaviour
         {
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0).normalized;
+            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0).normalized;
         }
 
         #endregion
 
         #region Handles Crouch
 
-        void ChangeCrouchingHeight()
-        {
-            crouchLerpTime = Mathf.Clamp01(crouchLerpTime);
-            float currentPlayerHeight = Mathf.Lerp(defaultPlayerHeight, crouchingHeight, crouchLerpTime);
-            crouchingMoveObj.transform.localPosition = new Vector3(crouchingMoveObj.transform.localPosition.x, currentPlayerHeight, crouchingMoveObj.transform.localPosition.z);
-        }
+       // void ChangeCrouchingHeight()
+        //{
+        //    crouchLerpTime = Mathf.Clamp01(crouchLerpTime);
+        //    float currentPlayerHeight = Mathf.Lerp(defaultPlayerHeight, crouchingHeight, crouchLerpTime);
+        //    crouchingMoveObj.transform.localPosition = new Vector3(crouchingMoveObj.transform.localPosition.x, currentPlayerHeight, crouchingMoveObj.transform.localPosition.z);
+        //}
 
         //if (Input.GetKey(KeyCode.LeftControl))
         //{

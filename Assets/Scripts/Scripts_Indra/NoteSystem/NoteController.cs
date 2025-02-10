@@ -25,6 +25,15 @@ public class NoteController : CS_InteractableObject
     [SerializeField] private UnityEvent openEvent;
     //private bool isOpen = false; // redundant
 
+    AudioManager audioManager;
+    [SerializeField] AudioClip noteSound;
+    [SerializeField] AudioClip noteOutSound;
+
+    private void Start()
+    {
+        audioManager = FindFirstObjectByType<AudioManager>();
+    }
+
     public override void OnActivate()
     {
         if (noteData == null)
@@ -49,6 +58,7 @@ public class NoteController : CS_InteractableObject
         {
             protoTimer.PauseTimer(true); //stops timer
         }
+        audioManager.PlaySFX(noteSound);
     }
 
     public override void OnDeactivate()
@@ -60,12 +70,12 @@ public class NoteController : CS_InteractableObject
         {
             protoTimer.PauseTimer(false); // resumes timer
         }
-
+        audioManager.PlaySFX(noteOutSound);
     }
 
     public override void OnInteract()
     {
-
+        
     }
 
     public void ShowNote()

@@ -1,6 +1,9 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 //Made by Daniel
 public class InteractBunny : MonoBehaviour
 {
@@ -12,14 +15,22 @@ public class InteractBunny : MonoBehaviour
 
     [SerializeField] LayerMask layerMask;
     [SerializeField] private int interactRange, foodNeeded;
-    [SerializeField] private PrototypeTimer timer;
+    [SerializeField] public PrototypeTimer timer; //made this public for max cap /indra
     public GameObject m_saveWindow;
+
+    [SerializeField] public Image crossFade;
+    [SerializeField] float initialDelay = 2.0f;
+    [SerializeField] float displayTime = 2.0f;
 
     Animator bunnyAnimator;
 
     [SerializeField] TextMeshProUGUI foodText;
 
     /*[System.NonSerialized]*/ public bool increaseTimer;
+    public int supaCarrotCount;
+
+    public const int maxFoods = 3; //added by indra, this is to ensure a cap for collectables
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -69,7 +80,7 @@ public class InteractBunny : MonoBehaviour
 
     public void UpdateFood()
     {
-        if (timer.gameData.foods < foodNeeded)
+        if (timer.gameData.foods < maxFoods)
         {
             timer.gameData.foods++;
             foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
@@ -78,7 +89,7 @@ public class InteractBunny : MonoBehaviour
 
     public void OnClickSaveYes()
     {
-        if (increaseTimer) timer.maxTime += 20;
+        if (increaseTimer) timer.maxTime += (uint)(supaCarrotCount * 20);
         m_saveWindow.SetActive(false);
         // This will save game and start a new day
         // First, set food number right
@@ -92,7 +103,7 @@ public class InteractBunny : MonoBehaviour
 
         // then save the game
         //timer.NewDay();
-
+        StartCoroutine(Crossfade(initialDelay, displayTime));
         // resume UI status
 
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -100,6 +111,14 @@ public class InteractBunny : MonoBehaviour
 
         //Animation stuff
         bunnyAnimator.SetTrigger("Thing");
+    }
+
+    private IEnumerator Crossfade(float initialDelay, float dt)
+    {
+        yield return new WaitForSeconds(initialDelay);
+        crossFade.gameObject.SetActive(true);
+        yield return new WaitForSeconds(dt);
+        crossFade.gameObject.SetActive(false);
     }
 
     public void OnClickSaveNo()

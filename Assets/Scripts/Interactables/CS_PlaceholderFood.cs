@@ -14,10 +14,17 @@ namespace Interactables
         }
         public override void OnInteract()
         {
-            interactBunny.UpdateFood();
-            Destroy(this.gameObject);
+            if (interactBunny.timer.gameData.foods < InteractBunny.maxFoods) //limits food to max 3
+            {
+                interactBunny.UpdateFood();
+                Destroy(this.gameObject);
 
-            if (isSupaFood) interactBunny.increaseTimer = true;
+                if (isSupaFood) interactBunny.increaseTimer = true;
+            }
+            else
+            {
+            
+            }
 
         }
         public override void OnActivate() { }

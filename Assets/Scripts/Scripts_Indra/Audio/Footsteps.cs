@@ -7,7 +7,7 @@ using System;
 public class Footsteps : MonoBehaviour 
 {
     public AudioSource footstepSource;
-    public AudioClip stoneStep, throneStep, waterStep;
+    public AudioClip defaultStep, throneStep, waterStep;
 
     private CharacterController characterController;
 
@@ -18,6 +18,8 @@ public class Footsteps : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
+
         if (characterController.isGrounded && characterController.velocity.magnitude > 1f)
         {
             if (!footstepSource.isPlaying) 
@@ -34,12 +36,13 @@ public class Footsteps : MonoBehaviour
         switch (floorLayer) 
         {
             case "Default":
-                footstepSource.clip = stoneStep; Debug.Log("Stone");
+                footstepSource.clip = defaultStep; Debug.Log("Default");
                 break;
 
             case "Throne":
                 footstepSource.clip = throneStep; Debug.Log("Throne");
                 break;
+
             case "Water":
                 footstepSource.clip = waterStep; Debug.Log("Water");
                 break;
