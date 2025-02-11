@@ -144,3 +144,4 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   noteSound: {fileID: 8300000, guid: d54920efd9201194b98b92bc1244df10, type: 3}
+  noteOutSound: {fileID: 8300000, guid: f906fad664ce379439e92c7b34874da7, type: 3}

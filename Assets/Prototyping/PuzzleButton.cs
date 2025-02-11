@@ -15,39 +15,66 @@ public class PuzzleButton : MonoBehaviour
     [SerializeField] AudioClip buttonPressOff;
 
     bool inMotion;
+    Collider buttonCollider;
+
+    bool playerOnButton = false;
 
     private void Start()
     {
         audioManager = FindFirstObjectByType<AudioManager>();
+        buttonCollider = GetComponent<Collider>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((other.gameObject.name == "PlayerNew" || other.gameObject.name == "Crate") && !inMotion)
+        if ((other.gameObject.name == "PlayerNew" && !inMotion)) //|| other.gameObject.name == "Crate") 
         {
             audioManager.PlaySFX(buttonPressOn);
             IsPressed = true;
-
+            playerOnButton = true;
             StartCoroutine(SquishButton());
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if ((other.gameObject.name == "PlayerNew" || other.gameObject.name == "Crate") && !inMotion)
+        if ((other.gameObject.name == "PlayerNew" && !inMotion)) //|| other.gameObject.name == "Crate") 
         {
             if (!remainPressed)
             {
                 audioManager.PlaySFX(buttonPressOff);
                 StartCoroutine(UnSquishButton());
                 IsPressed = false;
+                playerOnButton = false;
             }
-            else
-            {
+        }
+    }
 
-            }   
-            
-            
+    private void FixedUpdate()
+    {
+        Collider[] colliders = Physics.OverlapBox(buttonCollider.bounds.center, buttonCollider.bounds.extents, Quaternion.identity);
+        bool crateOnButton = false;
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject.name == "Crate")
+            {
+                crateOnButton = true;
+                break;
+            }
+        }
+
+        if (crateOnButton && !IsPressed && !inMotion)
+        {
+            audioManager.PlaySFX(buttonPressOn);
+            IsPressed = true;
+            StartCoroutine(SquishButton());
+        }
+        else if (!crateOnButton && IsPressed && !remainPressed && !inMotion && !playerOnButton)
+        {
+            audioManager.PlaySFX(buttonPressOff);
+            IsPressed = false;
+            StartCoroutine(UnSquishButton());
         }
     }
 

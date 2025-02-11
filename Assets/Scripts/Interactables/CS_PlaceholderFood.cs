@@ -6,24 +6,30 @@ namespace Interactables
     public class CS_PlaceholderFood : CS_InteractableObject
     {
         [SerializeField] bool isSupaFood;
-
+        [SerializeField] AudioClip foodSound;
+        AudioManager audioManager;
         private InteractBunny interactBunny;
         private void Start()
         {
+            audioManager = FindFirstObjectByType<AudioManager>();
             interactBunny = GameObject.Find("PlayerNew").GetComponent<InteractBunny>();
         }
         public override void OnInteract()
         {
-            if (interactBunny.timer.gameData.foods < InteractBunny.maxFoods) //limits food to max 3
+            if (interactBunny.timer.gameData.foods < InteractBunny.maxFoods && !isSupaFood) //limits food to max 3
             {
                 interactBunny.UpdateFood();
                 Destroy(this.gameObject);
+                audioManager.PlaySFX(foodSound);
 
-                if (isSupaFood) interactBunny.increaseTimer = true;
+                
             }
             else
             {
-            
+                interactBunny.increaseTimer = true;
+                interactBunny.supaCarrotCount++;
+                audioManager.PlaySFX(foodSound);
+                Destroy(this.gameObject);
             }
 
         }

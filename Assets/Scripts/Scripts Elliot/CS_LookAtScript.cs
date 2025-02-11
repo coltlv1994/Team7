@@ -1,11 +1,27 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CS_LookAtScript : MonoBehaviour
 {
     public GameObject playerOBJ;
+    public float yAxis;
     // Update is called once per frame
+
+
+    private void Start()
+    {
+        playerOBJ = GameObject.FindGameObjectWithTag("Player");
+    }
     void Update()
     {
-       this.transform.localPosition = new Vector3(playerOBJ.transform.localPosition.x, this.transform.localPosition.y, playerOBJ.transform.localPosition.z);
+        if(playerOBJ.transform.position.y < yAxis - 0.5f)
+        {
+            yAxis = playerOBJ.transform.position.y; 
+        }
+        if (playerOBJ.transform.position.y > yAxis + 0.5f)
+        {
+            yAxis = playerOBJ.transform.position.y;
+        }
+        this.transform.localPosition = new Vector3(playerOBJ.transform.localPosition.x, yAxis, playerOBJ.transform.localPosition.z);
     }
 }

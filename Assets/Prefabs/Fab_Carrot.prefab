@@ -238,3 +238,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _outline: {fileID: 2100000, guid: eabd2f245fdc3ea4e9b05364de45cfd3, type: 2}
   isSupaFood: 0
+  foodSound: {fileID: 8300000, guid: f4b08e5f66b521e4997a0841140b875c, type: 3}

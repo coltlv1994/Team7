@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4158786482532689252
 Transform:
   m_ObjectHideFlags: 0
@@ -46,3 +46,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 0}
   dialogueText: {fileID: 0}
+  UI: {fileID: 0}
+  baseDialogue:
+    npcName: Bunny
+    sentences:
+    - Bring me my food or be my food! Carrots is what I want, though, cake would
+      be nice... On with you then! And don't be late...
+    - Mmph, very good! Very good! You may have to venture deeper to find more...
+      But you'll have to do what it takes! I will be waiting... 'til evening!
+    - I could eat these all my days! Making good use of that sword I gave you, eh?
+      It is strong enough to whack crates around, an impressive piece of equipment
+      if I may say so myself!
+    - Oh, finally! Mmm, hits the spot! How are you liking your new life here in the
+      dungeon? You better not be looking for a way out...
+    - Look who's back! More carrots to me! Mmph, just as good as yesterday.
+  secondsToShow: 5

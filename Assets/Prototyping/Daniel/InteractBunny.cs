@@ -31,12 +31,13 @@ public class InteractBunny : MonoBehaviour
 
     public const int maxFoods = 3; //added by indra, this is to ensure a cap for collectables
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    PrototypeTimer pTimer;
     void Start()
     {
         //timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
         m_saveWindow.SetActive(false);
         timer.gameData.foods = 0;
+        pTimer = FindAnyObjectByType<PrototypeTimer>();
     }
 
     // Update is called once per frame
@@ -89,7 +90,13 @@ public class InteractBunny : MonoBehaviour
 
     public void OnClickSaveYes()
     {
-        if (increaseTimer) timer.maxTime += (uint)(supaCarrotCount * 20);
+        if (increaseTimer)
+        {
+            timer.maxTime += (uint)(supaCarrotCount * 20);
+            AnimationReceiver animRec = FindAnyObjectByType<AnimationReceiver>();
+            animRec.hasCake = true;
+
+        }
         m_saveWindow.SetActive(false);
         // This will save game and start a new day
         // First, set food number right
@@ -103,7 +110,7 @@ public class InteractBunny : MonoBehaviour
 
         // then save the game
         //timer.NewDay();
-        StartCoroutine(Crossfade(initialDelay, displayTime));
+        //StartCoroutine(CrossFadeLerpInAndOut(initialDelay, displayTime));
         // resume UI status
 
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -120,6 +127,8 @@ public class InteractBunny : MonoBehaviour
         yield return new WaitForSeconds(dt);
         crossFade.gameObject.SetActive(false);
     }
+    
+    
 
     public void OnClickSaveNo()
     {
