@@ -16,7 +16,7 @@ namespace Interactables
         }
         public override void OnInteract()
         {
-            if (interactBunny.timer.gameData.foods < InteractBunny.maxFoods && !isSupaFood) //limits food to max 3
+            if (interactBunny.pTimer.gameData.foods < InteractBunny.maxFoods && !isSupaFood) //limits food to max 3
             {
                 interactBunny.UpdateFood();
                 Destroy(this.gameObject);

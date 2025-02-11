@@ -66,7 +66,6 @@ public class PrototypeTimer : MonoBehaviour
             sw.WriteLine(kvp.Key + "=" + kvp.Value);
         }
 
-        sw.Close();
         foreach (GameObject checkDoor in m_buttonOBJS)
         {
             if (checkDoor.GetComponent<PuzzleButton>().IsPressed)
@@ -74,12 +73,16 @@ public class PrototypeTimer : MonoBehaviour
                 m_doorsOpened.Add(checkDoor);
             }
         }
-        m_crateLocations.Clear();
+
         foreach (GameObject checkCrate in m_crateOBJS)
         {
-            m_crateLocations.Add(checkCrate.transform.position);
+            // write to file
+            // note: it offsets crate's location to make sure it won't stuck at ground
+            // could be removed if this is deemed unnecessary.
+            sw.WriteLine("crate=" + checkCrate.transform.position.x + "," + (checkCrate.transform.position.y + 2) +","+ checkCrate.transform.position.z);
         }
 
+        sw.Close();
         Debug.Log("Game Saved.");
     }
 
@@ -87,6 +90,7 @@ public class PrototypeTimer : MonoBehaviour
     {
         // TODO: add execption handlers in this function
         Dictionary<string, string> m_inputStatus = new Dictionary<string, string>();
+        List<Vector3> m_crateRespawnLocation = new List<Vector3>();
 
         foreach (string line in File.ReadLines(savePath))
         {
@@ -98,18 +102,30 @@ public class PrototypeTimer : MonoBehaviour
             }
 
             string[] fields = line.Split("=");
-            m_inputStatus[fields[0]] = fields[1]; // read it and cover default value
+            if (fields[0] == "crate")
+            {
+                // read crate location
+                string[] position = fields[0].Split(",");
+                Vector3 crateLocation = new Vector3(float.Parse(position[0]), float.Parse(position[1]), float.Parse(position[2]));
+                m_crateRespawnLocation.Add(crateLocation);
+            }
+            else
+            {
+                m_inputStatus[fields[0]] = fields[1]; // read it and cover default value
+            }
         }
 
         foreach (GameObject checkDoor in m_doorsOpened)
         {
             checkDoor.GetComponent<PuzzleButton>().IsPressed = true;
         }
-        int currentCrateCheck = 0;
-        foreach (GameObject checkCrate in m_crateOBJS)
+
+        // reset crate location
+        // make sure no illegal access
+        int noOfCrates = Mathf.Min(m_crateRespawnLocation.Count, m_crateOBJS.Count);
+        for (int i = 0; i < noOfCrates; i++)
         {
-            checkCrate.transform.position = m_crateLocations[currentCrateCheck];
-            currentCrateCheck++;
+            m_crateOBJS[i].transform.position = m_crateRespawnLocation[i];
         }
 
         gameData.ParseFromDict(m_inputStatus);

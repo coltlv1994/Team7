@@ -15,8 +15,9 @@ public class InteractBunny : MonoBehaviour
 
     [SerializeField] LayerMask layerMask;
     [SerializeField] private uint interactRange, foodNeeded;
-    [SerializeField] public PrototypeTimer timer; //made this public for max cap /indra
     public GameObject m_saveWindow;
+    // not sure if it is needed
+    public GameObject m_timerParent;
 
     [SerializeField] public Image crossFade;
     [SerializeField] float initialDelay = 2.0f;
@@ -31,13 +32,15 @@ public class InteractBunny : MonoBehaviour
 
     public const int maxFoods = 3; //added by indra, this is to ensure a cap for collectables
 
-    PrototypeTimer pTimer;
+    public PrototypeTimer pTimer;
     void Start()
     {
         //timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
         m_saveWindow.SetActive(false);
-        timer.gameData.foods = 0;
         pTimer = FindAnyObjectByType<PrototypeTimer>();
+        // or try below line?
+        //pTimer = m_timerParent.GetComponent<PrototypeTimer>();
+        pTimer.gameData.foods = 0;
     }
 
     // Update is called once per frame
@@ -47,7 +50,7 @@ public class InteractBunny : MonoBehaviour
         {
             print("looking for bunny");
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && timer.gameData.foods >= foodNeeded)
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && pTimer.gameData.foods >= foodNeeded)
             {
                 // popup save window
                 m_saveWindow.SetActive(true);
@@ -57,14 +60,14 @@ public class InteractBunny : MonoBehaviour
                 bunnyAnimator = hit.transform.gameObject.GetComponentInParent<Animator>();
             }
         }
-        timer.UpdateFromManager(Time.deltaTime);
+        pTimer.UpdateFromManager(Time.deltaTime);
     }
     private void OnTriggerEnter(Collider other) //Pauses timer when entering the Bunny's room
     {
         if (other.transform.tag == "BunnyRoom")
         {
             print("I am in here");
-            timer.timeTicking = false;
+            pTimer.timeTicking = false;
         }
     }
     private void OnTriggerExit(Collider other) //Resumes timer when leaving the Bunny's room
@@ -72,19 +75,19 @@ public class InteractBunny : MonoBehaviour
         if (other.transform.tag == "BunnyRoom")
         {
             print("I am out in the dungeon");
-            timer.timeTicking = true;
+            pTimer.timeTicking = true;
 
             //UpdateFood();
-            foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
+            foodText.text = "Food: " + pTimer.gameData.foods.ToString() + "/" + foodNeeded;
         }
     }
 
     public void UpdateFood()
     {
-        if (timer.gameData.foods < maxFoods)
+        if (pTimer.gameData.foods < maxFoods)
         {
-            timer.gameData.foods++;
-            foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
+            pTimer.gameData.foods++;
+            foodText.text = "Food: " + pTimer.gameData.foods.ToString() + "/" + foodNeeded;
         }
     }
 
@@ -92,7 +95,7 @@ public class InteractBunny : MonoBehaviour
     {
         if (increaseTimer)
         {
-            timer.maxTime += (uint)(supaCarrotCount * 20);
+            pTimer.maxTime += (uint)(supaCarrotCount * 20);
             AnimationReceiver animRec = FindAnyObjectByType<AnimationReceiver>();
             animRec.hasCake = true;
 
@@ -100,8 +103,8 @@ public class InteractBunny : MonoBehaviour
         m_saveWindow.SetActive(false);
         // This will save game and start a new day
         // First, set food number right
-        timer.gameData.foods -= foodNeeded;
-        foodText.text = "Food: " + timer.gameData.foods.ToString() + "/" + foodNeeded;
+        pTimer.gameData.foods -= foodNeeded;
+        foodText.text = "Food: " + pTimer.gameData.foods.ToString() + "/" + foodNeeded;
 
         // This function will fail/throw an exception, if save file under game directory is set to
         // "readonly". When it throws exception, it will block rest of codes in this function from executing,
@@ -109,7 +112,7 @@ public class InteractBunny : MonoBehaviour
         // To solve this problem, kindly remove the file's "readonly" attribute or delete the file.
 
         // then save the game
-        //timer.NewDay();
+        pTimer.NewDay();
         //StartCoroutine(CrossFadeLerpInAndOut(initialDelay, displayTime));
         // resume UI status
 
