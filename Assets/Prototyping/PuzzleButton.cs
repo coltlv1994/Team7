@@ -78,7 +78,7 @@ public class PuzzleButton : MonoBehaviour
         }
     }
 
-    private IEnumerator SquishButton()
+    public IEnumerator SquishButton()
     {
         inMotion = true;
         Transform scaleObject = transform.GetChild(0);

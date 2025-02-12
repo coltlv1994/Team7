@@ -77,7 +77,7 @@ public class PrototypeTimer : MonoBehaviour
             {
                 //m_doorsOpened.Add(button);
                 // only write pressed button's position
-                sw.WriteLine("buttonPressed=" + button.transform.position.x + button.transform.position.y + button.transform.position.z);
+                sw.WriteLine("buttonPressed=" + button.transform.position.x + "," + button.transform.position.y + "," + button.transform.position.z);
             }
         }
 
@@ -131,7 +131,9 @@ public class PrototypeTimer : MonoBehaviour
                     }
 
                     int minIndex = m_buttonDistance.IndexOf(m_buttonDistance.Min());
-                    m_buttonOBJS[minIndex].GetComponent<PuzzleButton>().IsPressed = true;
+                    PuzzleButton p_button = m_buttonOBJS[minIndex].GetComponent<PuzzleButton>();
+                    p_button.IsPressed = true;
+                    StartCoroutine(p_button.SquishButton());
                 }
                 else
                 {
