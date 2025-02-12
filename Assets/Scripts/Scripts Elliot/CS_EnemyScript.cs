@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -18,16 +19,15 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     [Header("Lunge Settings")]
     public float m_lungeAtPlayerMinDistance;
     public float m_lungeForce;
-    public bool m_lungingAtPlayer;
-    float m_resetLungeTimer;
-    int ammountOfLunge = 1;
+    [NonSerialized] public bool m_lungingAtPlayer;
+    [NonSerialized] public float m_resetLungeTimer;
+    [NonSerialized] public int ammountOfLunge = 1;
     bool m_takingtheDamage;
-    public float m_stunStopTimer;
 
     [Header("Ground Settings")]
     public float raycastToGround;
     float walkingBackTime;
-    public bool m_recovering;
+    [NonSerialized] public bool m_recovering;
 
     [Header("Combat")]
     public int m_enemyDamage;
@@ -36,22 +36,25 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     bool m_died;
     bool m_canGiveDamage = true;
     float m_resetStateTimer;
-    bool StunStopping;
-    public bool firstHit;
+    [NonSerialized] public bool StunStopping;
+    [NonSerialized] public bool firstHit;
     public bool m_canJuggleEnemy;
-    public bool m_jugglingEnemy;
+    [NonSerialized] public bool m_jugglingEnemy;
     bool takenHitLand;
+    public float m_enemyKnockbackForce;
+    [NonSerialized] public bool stopTime;
+    [NonSerialized] public bool startTime;
+    private float timeScaler;
 
     [Header("Refrences")]
-    public GameObject m_playerOBJ;
+    [NonSerialized] GameObject m_playerOBJ;
     FPSController m_playerScript;
-    [SerializeField] CS_PlayerHealthbar m_healthbar;
+    [NonSerialized] CS_PlayerHealthbar m_healthbar;
     SkinnedMeshRenderer[] m_meshrenders;
 
-    public GameObject m_pivotObject;
+    [NonSerialized] public GameObject m_pivotObject;
     Vector3 startPosition; 
 
-    public Collider m_collider;
     SphereCollider m_sphereCollider;
     Rigidbody m_rb;
     CS_RespawnCheck m_respawnCheck;
@@ -77,6 +80,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         m_lookAtPlayerPivotPrefab = GameObject.Find("LookingAtPlayerPivot");
         m_pivotObject = this.gameObject.transform.GetChild(0).gameObject;
         state = EnemyState.SpawningState;
+        timeScaler = 1f;
+        enemyAnimtor.SetTrigger("Spawn");
     }
     public enum EnemyState
     {
@@ -84,77 +89,71 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         WalkBackState = 1,
         AttackState = 2,
         DieState = 3,
-        StunStopSate = 4,
-        SpawningState = 5
+        SpawningState = 4
     }
 
     public void Update()
     {
-        Vector3 down = transform.TransformDirection(Vector3.down) * raycastToGround;
-        Debug.DrawRay(transform.position, down, Color.red);
-        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Pause) return;
-
-        if (m_enemyCurrentHealth <= 0) { state = EnemyState.DieState; }
-        if (m_recovering) Recovery();
-        if(m_canJuggleEnemy) m_jugglingEnemy = false;
-
-        if (StunStopping && m_stunStopTimer != 0) state = EnemyState.StunStopSate;
-
-        if(m_stunStopTimer >= 0.5f) state = EnemyState.AttackState;
-
-        m_resetStateTimer += Time.deltaTime;
-        if (m_resetStateTimer >= 1 && state != EnemyState.AttackState && state != EnemyState.StunStopSate)
+        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Play)
         {
-            m_sphereCollider.enabled = false;
-            m_sphereCollider.enabled = true;
-            m_resetStateTimer = 0;
+            Time.timeScale = timeScaler;
+            Vector3 down = transform.TransformDirection(Vector3.down) * raycastToGround;
+            Debug.DrawRay(transform.position, down, Color.red);
+
+            if (m_enemyCurrentHealth <= 0) { state = EnemyState.DieState; }
+            if (m_recovering) Recovery();
+            StunStopFunction();
+            if (m_canJuggleEnemy) m_jugglingEnemy = false;
+
+            m_resetStateTimer += Time.deltaTime;
+            if (m_resetStateTimer >= 1 && state != EnemyState.AttackState)
+            {
+                transform.localRotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
+                m_sphereCollider.enabled = false;
+                m_sphereCollider.enabled = true;
+                m_resetStateTimer = 0;
+            }
+            if (m_lungingAtPlayer) m_resetLungeTimer += Time.deltaTime;
+            if (m_resetLungeTimer > 5f)
+            {
+                m_canGiveDamage = true;
+                m_lungingAtPlayer = false;
+                ammountOfLunge = 1;
+                m_resetLungeTimer = 0;
+            }
+            switch (state)
+            {
+                case EnemyState.SpawningState:
+                    SpawningActive();
+                    break;
+
+                case EnemyState.IdleState:
+                    m_respawnCheck.state = PlayerCombatState.OutsideCombatState;
+                    IdleIsActive();
+                    break;
+
+                case EnemyState.WalkBackState:
+                    m_respawnCheck.state = PlayerCombatState.OutsideCombatState;
+                    walkingBackTime += Time.deltaTime;
+                    WalkBackActive();
+                    break;
+
+                case EnemyState.AttackState:
+                    m_respawnCheck.state = PlayerCombatState.CombatState;
+                    AttackIsActive();
+                    break;
+
+                case EnemyState.DieState:
+                    DyingIsActive();
+                    break;
+                default: break;
+            }
         }
-        if (m_lungingAtPlayer) m_resetLungeTimer += Time.deltaTime;
-        if (m_resetLungeTimer > 5f)
+        else
         {
-            m_canGiveDamage = true;
-            m_lungingAtPlayer = false; 
-            ammountOfLunge = 1;
-            m_resetLungeTimer = 0;
-        }
-        switch (state)
-        {
-            case EnemyState.SpawningState:
-                m_rb.isKinematic = false;
-                SpawningActive();
-                break;
-
-            case EnemyState.IdleState:
-                m_rb.isKinematic = false;
-                m_respawnCheck.state = PlayerCombatState.OutsideCombatState;
-                IdleIsActive();
-                break;
-
-            case EnemyState.WalkBackState:
-                m_rb.isKinematic = false;
-                m_respawnCheck.state = PlayerCombatState.OutsideCombatState;
-                walkingBackTime += Time.deltaTime;
-                WalkBackActive();
-                break;
-
-            case EnemyState.AttackState:
-                m_rb.isKinematic = false;
-                m_respawnCheck.state = PlayerCombatState.CombatState;
-                AttackIsActive();
-                break;
-
-            case EnemyState.DieState:
-                DyingIsActive();
-                break;
-
-            case EnemyState.StunStopSate:
-                m_stunStopTimer += Time.deltaTime;
-                StunStopFunction();
-                break;
-            default: break;
+            Time.timeScale = 0;
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject == m_playerOBJ)
@@ -202,7 +201,6 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
                 }
             }      
     }
-
     private void IdleIsActive()
     {
         //Walking animation
@@ -244,11 +242,9 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
                 enemyAnimtor.SetTrigger("Attack_Jump");
                 enemyAnimtor.Play("Attack_Jump");
 
-                m_collider.enabled = false;
                 ammountOfLunge--;
                 enemyAnimtor.SetTrigger("Attack_Bite");
             }
-            m_collider.enabled = true;
         }
         enemyAnimtor.SetTrigger("Attack_Land");
     }
@@ -267,7 +263,9 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
 
     private void DyingIsActive()
     {
-        ////Do Dying Animation    
+        ////Do Dying Animation
+        m_canGiveDamage = false;
+        m_canGiveDamage = false;
         enemyAnimtor.Play("Hit Die");
         firstHit = true;
     }
@@ -280,11 +278,13 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     }
     public void TakingDamage(int takenDamage)
     {
+        if(StunStopping) return;
         if (!firstHit && !m_jugglingEnemy)
         {
             firstHit = true;
             takenHitLand = true;
             m_enemyCurrentHealth -= takenDamage;
+            m_rb.AddForce(-transform.forward * m_enemyKnockbackForce, ForceMode.Impulse);
             //Do Take Damage Animaton
             enemyAnimtor.SetTrigger("Hit");
             StartCoroutine(ChangeColorCoroutine());
@@ -345,24 +345,25 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         else
         {
             //Do Wiggle In Air Animation, might be combined with the Getting Hit Animation
+            m_canGiveDamage = false;
             m_jugglingEnemy = true;
         }
     }
-
     private void StunStopFunction()
     {
-        StunStopping = true;
-        m_rb.isKinematic = true;
-        if (m_stunStopTimer >= 0.25f && m_lungingAtPlayer)
+        if (stopTime)
         {
-            m_lungingAtPlayer = false;
-            m_rb.isKinematic = false;
+            timeScaler = 0f;
+            startTime = true;
+            stopTime = false;
+        }
+        if (startTime) { timeScaler += Time.unscaledDeltaTime; }
 
-            m_rb.AddForce(transform.forward * m_lungeForce, ForceMode.Impulse);
-            m_rb.AddForce(transform.up * m_lungeForce, ForceMode.Impulse);
+        if (timeScaler >= 1f)
+        {
+            startTime = false;
+            timeScaler = 1f;
             StunStopping = false;
-            m_stunStopTimer = 0;
-            state = EnemyState.AttackState;
         }
     }
 }

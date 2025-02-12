@@ -46,21 +46,17 @@ public class InteractBunny : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            print("looking for bunny");
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, interactRange, layerMask) && pTimer.gameData.foods >= foodNeeded)
-            {
-                // popup save window
-                m_saveWindow.SetActive(true);
-                UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-                UnityEngine.Cursor.visible = true;
-
-                bunnyAnimator = hit.transform.gameObject.GetComponentInParent<Animator>();
-            }
-        }
         pTimer.UpdateFromManager(Time.deltaTime);
+    }
+    public void BunnyInteraction(GameObject bunny)
+    {
+        if (pTimer.gameData.foods < foodNeeded)
+            return;
+        
+        m_saveWindow.gameObject.SetActive(true);
+        UnityEngine.Cursor.lockState = CursorLockMode.Confined;
+        UnityEngine.Cursor.visible = true;
+        bunnyAnimator = bunny.gameObject.GetComponentInParent<Animator>();
     }
     private void OnTriggerEnter(Collider other) //Pauses timer when entering the Bunny's room
     {
@@ -112,7 +108,7 @@ public class InteractBunny : MonoBehaviour
         // To solve this problem, kindly remove the file's "readonly" attribute or delete the file.
 
         // then save the game
-        pTimer.NewDay();
+        //pTimer.NewDay();
         //StartCoroutine(CrossFadeLerpInAndOut(initialDelay, displayTime));
         // resume UI status
 

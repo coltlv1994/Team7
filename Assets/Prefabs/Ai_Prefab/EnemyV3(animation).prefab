@@ -88,20 +88,12 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_lungeAtPlayerMinDistance: 5
   m_lungeForce: 5
-  m_lungingAtPlayer: 0
-  m_stunStopTimer: 0
   raycastToGround: 0.2
-  m_recovering: 0
   m_enemyDamage: 20
   m_enemyCurrentHealth: 0
   m_enemyMaxHealth: 100
-  firstHit: 0
   m_canJuggleEnemy: 1
-  m_jugglingEnemy: 0
-  m_playerOBJ: {fileID: 0}
-  m_healthbar: {fileID: 0}
-  m_pivotObject: {fileID: 0}
-  m_collider: {fileID: 3613139955414176037}
+  m_enemyKnockbackForce: 5
   ItemEnemyDrops: {fileID: 5672820376004276550, guid: df2212939872c214c89ff224cadfc619, type: 3}
   state: 0
 --- !u!135 &3613139955414176037
@@ -640,7 +632,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 3335567623772733428, guid: 5fee186c4bfa0974ea217770cf720a01, type: 3}
+  m_Mesh: {fileID: 3335567623772733428, guid: f4dc255a20e2ed045995acd9317fbbb1, type: 3}
   m_Bones:
   - {fileID: 6068334044560839419}
   - {fileID: 2903400945859862207}
@@ -910,7 +902,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4549415627368821468, guid: 5fee186c4bfa0974ea217770cf720a01, type: 3}
+  m_Mesh: {fileID: 4549415627368821468, guid: f4dc255a20e2ed045995acd9317fbbb1, type: 3}
   m_Bones:
   - {fileID: 6068334044560839419}
   - {fileID: 2903400945859862207}

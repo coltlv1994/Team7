@@ -18,11 +18,15 @@ public class AnimationReceiver : MonoBehaviour
 
     private int currentMaxTime;
 
+    ThroneGate gate;
+
     private void Start()
     {
         cakeOGPosition = cakeImage.transform.position;
         cakeImage.transform.gameObject.SetActive(false);
         currentMaxTime = (int)timer.maxTime;
+
+        gate = FindAnyObjectByType<ThroneGate>();
     }
 
     public void CakeMethod(int cakeAmount)
@@ -85,6 +89,8 @@ public class AnimationReceiver : MonoBehaviour
 
             timer.NewDay();
 
+            gate.StartCoroutine(gate.MoveGateUp());
+
             elapsedTime = 0;
             while (elapsedTime < duration)
             {
@@ -93,8 +99,28 @@ public class AnimationReceiver : MonoBehaviour
                 yield return null;
             }
             crossFade.color = startColor;
-            
+
             hasCake = false;
+        }
+        else
+        {
+            yield return new WaitForSeconds(2.0f);
+            dayText.gameObject.SetActive(false);
+            timerText.gameObject.SetActive(false);
+            timer.NewDay();
+
+            gate.StartCoroutine(gate.MoveGateUp());
+
+            elapsedTime = 0;
+            while (elapsedTime < duration)
+            {
+                crossFade.color = Color.Lerp(endColor, startColor, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            crossFade.color = startColor;
+
+            
         }
                
     }

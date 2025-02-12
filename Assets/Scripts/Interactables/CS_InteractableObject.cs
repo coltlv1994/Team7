@@ -12,7 +12,7 @@ namespace Interactables
         private Renderer _renderer;
         
         public Material Outline => _outline;
-        public Renderer Renderer => _renderer ??= GetComponent<Renderer>();
+        public Renderer Renderer => _renderer = GetComponent<Renderer>();
 
         public abstract void OnInteract();
         public abstract void OnActivate();

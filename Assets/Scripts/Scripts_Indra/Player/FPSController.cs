@@ -86,7 +86,6 @@ public class FPSController : MonoBehaviour
     {
         if(m_rb != null)
         {
-            print("KnocingBack");
             m_rb.AddForce(transform.forward * m_knockbackForce, ForceMode.Impulse);
         }
     }
@@ -160,10 +159,10 @@ public class FPSController : MonoBehaviour
 
         if (canMove)
         {
-            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
+            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed * Time.deltaTime;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0).normalized;
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0).normalized;
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed * Time.deltaTime, 0);
         }
 
         #endregion

@@ -83311,7 +83311,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 7.375
+  - time: 5.5
     functionName: CrossFadeLerp
     data: 
     objectReferenceParameter: {fileID: 0}

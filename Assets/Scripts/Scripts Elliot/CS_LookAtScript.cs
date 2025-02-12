@@ -14,14 +14,14 @@ public class CS_LookAtScript : MonoBehaviour
     }
     void Update()
     {
-        if(playerOBJ.transform.position.y < yAxis - 0.5f)
+        if(playerOBJ.transform.position.y < yAxis - 0.25f)
         {
             yAxis = playerOBJ.transform.position.y; 
         }
-        if (playerOBJ.transform.position.y > yAxis + 0.5f)
+        if (playerOBJ.transform.position.y > yAxis + 0.25f)
         {
             yAxis = playerOBJ.transform.position.y;
         }
-        this.transform.localPosition = new Vector3(playerOBJ.transform.localPosition.x, yAxis, playerOBJ.transform.localPosition.z);
+        this.transform.localPosition = new Vector3(playerOBJ.transform.localPosition.x, yAxis -1f, playerOBJ.transform.localPosition.z);
     }
 }

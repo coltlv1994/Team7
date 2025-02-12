@@ -56,17 +56,27 @@ public class SwordAttack : MonoBehaviour
         if(collidedEnemy != null)
         {   
           CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
-          if (other == capsuleCollider) collidedEnemy.TakingDamage(damageAmount);
-          if (collidedEnemy.m_lungingAtPlayer && collidedEnemy.firstHit)
-          {
-             collidedEnemy.state = CS_EnemyScript.EnemyState.StunStopSate;
-          }
+            if (other == capsuleCollider)
+            {
+                if (collidedEnemy.m_lungingAtPlayer)
+                { 
+                    if(!collidedEnemy.stopTime && !collidedEnemy.startTime) collidedEnemy.stopTime = true;
+                    if (collidedEnemy.StunStopping == false)
+                    {
+                        collidedEnemy.TakingDamage(damageAmount);
+                    }
+                }
+                else
+                {
+                    collidedEnemy.TakingDamage(damageAmount);
+                }
+            }
         }
 
         if (other.name.Contains("Crate"))
         {
             Debug.Log(other.name);
-
+             
             Vector3 direction = (other.transform.position - transform.position);
             direction.y = 0;
             direction.Normalize();

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4158786482532689252}
-  - component: {fileID: 6361496159691697252}
+  - component: {fileID: 4957003971741311060}
   m_Layer: 0
   m_Name: DialogueManager
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6361496159691697252
+--- !u!114 &4957003971741311060
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,23 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1619146720164517277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a503b7e3d943c6438601fa453c4f971, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a1bace62127eed4aab54a6fb2cabc03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  dialogueText: {fileID: 0}
-  UI: {fileID: 0}
-  baseDialogue:
-    npcName: Bunny
-    sentences:
-    - Bring me my food or be my food! Carrots is what I want, though, cake would
-      be nice... On with you then! And don't be late...
-    - Mmph, very good! Very good! You may have to venture deeper to find more...
-      But you'll have to do what it takes! I will be waiting... 'til evening!
-    - I could eat these all my days! Making good use of that sword I gave you, eh?
-      It is strong enough to whack crates around, an impressive piece of equipment
-      if I may say so myself!
-    - Oh, finally! Mmm, hits the spot! How are you liking your new life here in the
-      dungeon? You better not be looking for a way out...
-    - Look who's back! More carrots to me! Mmph, just as good as yesterday.
-  secondsToShow: 5
+  _dialogues:
+  - {fileID: 11400000, guid: 3bd2b9d45968bba42998b6e35b445ee6, type: 2}
+  - {fileID: 11400000, guid: d3d1fd422cd240342b37b92d09889226, type: 2}
+  - {fileID: 11400000, guid: cf1769ebe8d58f340a03ea79782a6e9f, type: 2}
+  - {fileID: 11400000, guid: e321a1daf9e59de43bb19f2dd8f7ca39, type: 2}
+  - {fileID: 11400000, guid: f834e9af5fec652428d7ae70c65ea97e, type: 2}
+  _readSpeed: 0.1

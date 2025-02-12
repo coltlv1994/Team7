@@ -1,7 +1,8 @@
-//Bisma
+//Bisma, Bogdan
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -10,9 +11,11 @@ public class MainMenuController : MonoBehaviour
     public GameObject loadGameConfirmation;
     public GameObject options;
 
+    public string mainMenu = "Main";
     public string gameStart;
     public string newGameStart;
     public string gameLoad;
+    [SerializeField] private float loadingDelay = 5f;
 
     public Button newGameButton;
     public Button loadGameButton;
@@ -28,11 +31,15 @@ public class MainMenuController : MonoBehaviour
     public Button backButton;
 
     public GameObject settings;
+    [SerializeField] private CameraMovement cameraController;
 
-    public GameSettingsPersistent gsp;
+    [SerializeField] private GameObject startScreen;
+
+    //public GameSettingsPersistent gsp;
 
     private void Start()
     {
+
         SetState(MainMenuState.MainMenu);
 
         newGameButton.onClick.AddListener(() => SetState(MainMenuState.NewGame));
@@ -48,7 +55,14 @@ public class MainMenuController : MonoBehaviour
 
         backButton.onClick.AddListener(BackToMainMenu);
 
-        //gsp = settings.GetComponent<GameSettingsPersistent>();
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            Destroy(startScreen);
+        }
     }
 
     private void SetState(MainMenuState newState)
@@ -66,19 +80,23 @@ public class MainMenuController : MonoBehaviour
 
     public void Startgame()
     {
-        SceneManager.LoadScene(gameStart);
+        SceneManager.LoadScene(1);
     }
 
     private void StartNewGame()
     {
-        SceneManager.LoadScene(newGameStart);
+        //Reset save file?
+        SceneManager.LoadScene(1);
     }
 
     private void LoadGame()
     {
         //player prefas to load saved scene data
-        settings.GetComponent<GameSettingsPersistent>().isLoadingSave = true; // this value is default to false
-        StartNewGame(); // start new game as normal
+        settings.GetComponent<GameSettingsPersistent>().isLoadingSave = true;
+        SceneManager.LoadScene(newGameStart);
+
+
+        // start new game as normal
         // in PrototypeTimer.cs, it will check settings.isLoadingSave,
         // if we found saving file and this is true, the game will load from save
         // otherwise a new game will start
@@ -93,4 +111,5 @@ public class MainMenuController : MonoBehaviour
     {
         Application.Quit();
     }
+
 }

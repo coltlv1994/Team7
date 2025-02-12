@@ -9,6 +9,7 @@ using UnityEngine.SocialPlatforms.Impl;
 public class CS_EnemyManager : MonoBehaviour
 {
     public List<GameObject> m_enemyTotal;
+    public PuzzleManager[] m_puzzleManagers;
     public List<Vector3> m_enemySpawnPoints;
      
     [Header("Move the boxcollider's position and size to set it how you want to it interact")]
@@ -28,6 +29,7 @@ public class CS_EnemyManager : MonoBehaviour
 
     private void OnEnable()
     {
+        m_puzzleManagers = GetComponentsInChildren<PuzzleManager>();
         m_prototypeTimer = FindAnyObjectByType<PrototypeTimer>();
         OnSpawnEnemies += SpawnEnemies;
         OnDespawnEnemies += DespawnEnemies;
@@ -68,23 +70,33 @@ public class CS_EnemyManager : MonoBehaviour
             m_prototypeTimer.timeTicking = true;
             m_killAllEnemiesSequence = false;
             CS_EnemyManager.OnDespawnEnemies.Invoke();
-            foreach (GameObject doorOBJ in BlockageOBJ)
+            //foreach (GameObject doorOBJ in BlockageOBJ)
+            //{
+            //    doorOBJ.SetActive(false);
+            //    //doorOBJ.GetComponent<PuzzleButton>().IsPressed = false;
+            //}
+            foreach(PuzzleManager theDoor in m_puzzleManagers)
             {
-                doorOBJ.SetActive(false);
+                theDoor.closeDoor = true;
             }
             print("Killed All enemies");  
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) 
     {
         if (other.gameObject.CompareTag("Player"))
         {
             m_killAllEnemiesSequence = true;
             this.GetComponent<Collider>().enabled = false;
-            foreach (GameObject doorOBJ in BlockageOBJ)
+            //foreach (GameObject doorOBJ in BlockageOBJ)
+            //{
+            //    doorOBJ.SetActive(true);
+            //    //doorOBJ.GetComponent<PuzzleButton>().IsPressed = true;
+            //}
+            foreach (PuzzleManager theDoor in m_puzzleManagers)
             {
-                doorOBJ.SetActive(true);
+                theDoor.openDoor = true;
             }
             CS_EnemyManager.OnSpawnEnemies.Invoke();
         }

@@ -25,7 +25,7 @@ namespace Interactables
         }
         void OnUnfocus()
         {
-            if (Renderer != null || Outline != null)
+            if (Renderer != null && Outline != null)
             {
                 Material[] currentMaterials = Renderer.sharedMaterials;
                 List<Material> newMaterials = new List<Material>();

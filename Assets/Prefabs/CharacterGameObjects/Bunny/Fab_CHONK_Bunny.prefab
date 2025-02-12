@@ -63,15 +63,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 23.227596
+      value: 24.152
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.42
+      value: 5.305
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -71.088
+      value: -69.75
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -119,6 +119,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 767579419755405093}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6472891758434793112}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8462466234273811953}
   m_SourcePrefab: {fileID: 100100000, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}
 --- !u!1 &8422900151575777101 stripped
 GameObject:
@@ -168,6 +174,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6472891758434793112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8422900151575777101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08b48a7ad143bd04ead21d2f07c52ddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outline: {fileID: 2100000, guid: eabd2f245fdc3ea4e9b05364de45cfd3, type: 2}
+--- !u!114 &8462466234273811953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8422900151575777101}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a6f29ffcf3d1f24fb45d1ac7e8a6dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueManager: {fileID: 0}
+  dialogue:
+    npcName: Bunny
+    sentences:
+    - hey!
+    - hey2!
 --- !u!4 &9200844843796026871 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 719960a3a8e6f744c8800a3d9500647e, type: 3}

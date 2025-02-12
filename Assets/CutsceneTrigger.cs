@@ -7,6 +7,8 @@ public class CutsceneTrigger : MonoBehaviour
     PrototypeTimer timer;
     [SerializeField] private PlayableDirector cutscene;
 
+    [SerializeField] GameObject[] stuffToDisable;
+
     private void Start()
     {
         timer = FindAnyObjectByType<PrototypeTimer>();
@@ -18,6 +20,11 @@ public class CutsceneTrigger : MonoBehaviour
             cutscene.Play();
             other.GetComponent<MeshRenderer>().enabled = false;
             timer.PauseTimer(true);
+
+            foreach (GameObject obj in stuffToDisable)
+            {
+                obj.SetActive(false);
+            }
         }
     }
 

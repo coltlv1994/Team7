@@ -13,6 +13,7 @@ TagManager:
   - GlobalSettings
   - Button
   - Crate
+  - DialogueCanvas
   layers:
   - Default
   - TransparentFX

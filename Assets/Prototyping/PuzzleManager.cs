@@ -11,7 +11,9 @@ public class PuzzleManager : MonoBehaviour
     [SerializeField] private float doorCloseTime = 3f;
     [SerializeField] private bool resetOnRelease = false;
     [SerializeField] private Transform cameraPosition;
+    [SerializeField] private CS_PuzzleLockTrigger puzzleLockTrigger;
 
+    private bool puzzleOpen = false;
     private bool puzzleSolved = false;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
@@ -21,6 +23,11 @@ public class PuzzleManager : MonoBehaviour
     //[SerializeField] AudioClip doorSound;
     [SerializeField] AudioManager audioManager;
 
+    //Elliot 
+    public bool openDoor;
+    public bool closeDoor;
+    public bool PuzzleOpen() => puzzleOpen;
+    
     private void Start()
     {
         audioManager = FindFirstObjectByType<AudioManager>();
@@ -32,10 +39,28 @@ public class PuzzleManager : MonoBehaviour
             initialPosition = door.position;
             targetPosition = door.position + Vector3.up * doorMoveHeight;
         }
+
+        if (puzzleLockTrigger != null)
+        {
+            puzzleLockTrigger.manager = this;
+        }
     }
 
     private void Update()
     {
+
+        if (closeDoor)
+        {
+            closeDoor = false;
+            if (doorCoroutine != null) StopCoroutine(doorCoroutine);
+            doorCoroutine = StartCoroutine(CloseDoor());
+        }
+        else if (openDoor)
+        {
+            openDoor = false;
+            if (doorCoroutine != null) StopCoroutine(doorCoroutine);
+            doorCoroutine = StartCoroutine(OpenDoor());
+        }
         int pressedCount = 0;
 
         foreach (PuzzleButton button in buttonScript)
@@ -68,6 +93,7 @@ public class PuzzleManager : MonoBehaviour
 
     private IEnumerator OpenDoor()
     {
+        puzzleOpen = true;
         float elapsedTime = 0f;
         Vector3 startPosition = door.position;
 
@@ -96,6 +122,7 @@ public class PuzzleManager : MonoBehaviour
 
     private IEnumerator CloseDoor()
     {
+        puzzleOpen = true;
         float elapsedTime = 0f;
         Vector3 startPosition = door.position;
         float remainingDistance = Vector3.Distance(startPosition, initialPosition);
@@ -121,5 +148,11 @@ public class PuzzleManager : MonoBehaviour
         {
             door.position = initialPosition;
         }
+    }
+
+    public void Lock()
+    {
+        StopAllCoroutines();
+        StartCoroutine(CloseDoor());
     }
 }

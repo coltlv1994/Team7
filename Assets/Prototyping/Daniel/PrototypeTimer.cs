@@ -5,7 +5,11 @@ using TMPro;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using DialogueSystem;
 using Unity.VisualScripting;
+using NUnit.Framework;
+using System;
+using System.Linq;
 
 //Made by Daniel
 public class PrototypeTimer : MonoBehaviour
@@ -15,7 +19,7 @@ public class PrototypeTimer : MonoBehaviour
     public bool timeTicking;
     public GameSettingsPersistent settings;
     [SerializeField] private TMP_Text timerText, dayText;
-    [SerializeField] private DialogueManager _dialogueManager;
+    [SerializeField] private CS_BunnyDialogueManager _dialogueManager;
 
     // Imported from Indra/Zhengyang's work
     public GameData gameData;
@@ -42,9 +46,9 @@ public class PrototypeTimer : MonoBehaviour
         m_buttonOBJS.Clear();
         m_crateOBJS.Clear();
 
-        foreach (GameObject checkDoor in GameObject.FindGameObjectsWithTag("Button"))
+        foreach (GameObject button in GameObject.FindGameObjectsWithTag("Button"))
         {
-            m_buttonOBJS.Add(checkDoor);
+            m_buttonOBJS.Add(button);
         }
         foreach (GameObject checkCrate in GameObject.FindGameObjectsWithTag("Crate"))
         {
@@ -66,11 +70,14 @@ public class PrototypeTimer : MonoBehaviour
             sw.WriteLine(kvp.Key + "=" + kvp.Value);
         }
 
-        foreach (GameObject checkDoor in m_buttonOBJS)
+        foreach (GameObject button in m_buttonOBJS)
         {
-            if (checkDoor.GetComponent<PuzzleButton>().IsPressed)
+            bool isButtonPressed = button.GetComponent<PuzzleButton>().IsPressed;
+            if (isButtonPressed)
             {
-                m_doorsOpened.Add(checkDoor);
+                //m_doorsOpened.Add(button);
+                // only write pressed button's position
+                sw.WriteLine("buttonPressed=" + button.transform.position.x + button.transform.position.y + button.transform.position.z);
             }
         }
 
@@ -79,7 +86,7 @@ public class PrototypeTimer : MonoBehaviour
             // write to file
             // note: it offsets crate's location to make sure it won't stuck at ground
             // could be removed if this is deemed unnecessary.
-            sw.WriteLine("crate=" + checkCrate.transform.position.x + "," + (checkCrate.transform.position.y + 2) +","+ checkCrate.transform.position.z);
+            sw.WriteLine("crate=" + checkCrate.transform.position.x + "," + (checkCrate.transform.position.y + 2.0f) + "," + checkCrate.transform.position.z);
         }
 
         sw.Close();
@@ -91,6 +98,7 @@ public class PrototypeTimer : MonoBehaviour
         // TODO: add execption handlers in this function
         Dictionary<string, string> m_inputStatus = new Dictionary<string, string>();
         List<Vector3> m_crateRespawnLocation = new List<Vector3>();
+        List<float> m_buttonDistance = new List<float>();
 
         foreach (string line in File.ReadLines(savePath))
         {
@@ -105,19 +113,31 @@ public class PrototypeTimer : MonoBehaviour
             if (fields[0] == "crate")
             {
                 // read crate location
-                string[] position = fields[0].Split(",");
+                string[] position = fields[1].Split(",");
                 Vector3 crateLocation = new Vector3(float.Parse(position[0]), float.Parse(position[1]), float.Parse(position[2]));
                 m_crateRespawnLocation.Add(crateLocation);
             }
             else
             {
-                m_inputStatus[fields[0]] = fields[1]; // read it and cover default value
-            }
-        }
+                if (fields[0] == "buttonPressed")
+                {
+                    // restore button
+                    string[] position = fields[1].Split(",");
+                    Vector3 buttonLocation = new Vector3(float.Parse(position[0]), float.Parse(position[1]), float.Parse(position[2]));
+                    m_buttonDistance.Clear();
+                    foreach (GameObject button in m_buttonOBJS)
+                    {
+                        m_buttonDistance.Add((button.transform.position - buttonLocation).magnitude);
+                    }
 
-        foreach (GameObject checkDoor in m_doorsOpened)
-        {
-            checkDoor.GetComponent<PuzzleButton>().IsPressed = true;
+                    int minIndex = m_buttonDistance.IndexOf(m_buttonDistance.Min());
+                    m_buttonOBJS[minIndex].GetComponent<PuzzleButton>().IsPressed = true;
+                }
+                else
+                {
+                    m_inputStatus[fields[0]] = fields[1]; // read it and cover default value
+                }
+            }
         }
 
         // reset crate location
@@ -136,13 +156,24 @@ public class PrototypeTimer : MonoBehaviour
     {
         settings = GameObject.FindGameObjectWithTag("GlobalSettings")?.GetComponent<GameSettingsPersistent>();
         if (settings == null)
+        {
             settings = gameObject.AddComponent<GameSettingsPersistent>();
-        
+            // NOTE: this line is for debugging purpose and should be removed before final build.
+            settings.isLoadingSave = true;
+        }
+
+
         if (File.Exists(savePath) && settings.isLoadingSave == true)
         {
             // load from save
             ReadFromSave();
             settings.isLoadingSave = false;
+        }
+
+        if (File.Exists(savePath) && settings.isLoadingSave == false)
+        {
+            // we should delete the file
+            File.Delete(savePath);
         }
 
         time = maxTime;
@@ -186,7 +217,7 @@ public class PrototypeTimer : MonoBehaviour
         gameData.day += 1;
         time = maxTime;
         SaveGame(); // autosave
-        
-        _dialogueManager.StartDialogue(Mathf.CeilToInt(gameData.day));
+
+        _dialogueManager.RunDialogue(Mathf.CeilToInt(gameData.day));
     }
 }
