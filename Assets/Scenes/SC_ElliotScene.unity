@@ -2082,7 +2082,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271813614}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fea736f6865dd2d49b3978e3897b0193, type: 3}
   m_Name: 
@@ -6536,10 +6536,6 @@ MonoBehaviour:
   crouchSpeed: 6
   jumpPower: 7
   gravity: 14
-  crouchingMoveObj: {fileID: 912777138}
-  defaultPlayerHeight: 1
-  crouchingHeight: 0.5
-  crouchingSpeed: 1
   m_worldBottomBoundry: -100
   m_respawnLocation: {x: 0, y: 0, z: 0}
   m_knockbackForce: 0
@@ -11276,6 +11272,8 @@ MonoBehaviour:
   cameraPosition: {fileID: 0}
   puzzleLockTrigger: {fileID: 0}
   audioManager: {fileID: 0}
+  openDoor: 0
+  closeDoor: 0
 --- !u!114 &1730326847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11299,6 +11297,8 @@ MonoBehaviour:
   cameraPosition: {fileID: 0}
   puzzleLockTrigger: {fileID: 0}
   audioManager: {fileID: 0}
+  openDoor: 0
+  closeDoor: 0
 --- !u!1001 &1746828554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13789,7 +13789,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008388949}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fea736f6865dd2d49b3978e3897b0193, type: 3}
   m_Name: 
@@ -15311,7 +15311,6 @@ MonoBehaviour:
   m_enemyMaxHealth: 100
   m_canJuggleEnemy: 1
   m_enemyKnockbackForce: 5
-  m_collider: {fileID: 4529563589906420736}
   ItemEnemyDrops: {fileID: 5672820376004276550, guid: df2212939872c214c89ff224cadfc619, type: 3}
   state: 0
 --- !u!1 &3576102931412812553
@@ -15722,7 +15721,7 @@ PrefabInstance:
     - target: {fileID: 1564779694911925205, guid: 119aecf391137ed4f95fbee070754511, type: 3}
       propertyPath: m_enemyPrefab
       value: 
-      objectReference: {fileID: 864503315335030323}
+      objectReference: {fileID: 506400542140982038, guid: cee6afb792176e34a933fae02f793da2, type: 3}
     - target: {fileID: 1564779694911925205, guid: 119aecf391137ed4f95fbee070754511, type: 3}
       propertyPath: BlockageOBJ.Array.size
       value: 2

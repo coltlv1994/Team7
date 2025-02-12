@@ -25,6 +25,7 @@ public class InteractBunny : MonoBehaviour
 
     Animator bunnyAnimator;
 
+    [SerializeField] GameObject foodObject;
     [SerializeField] TextMeshProUGUI foodText;
 
     /*[System.NonSerialized]*/ public bool increaseTimer;
@@ -33,6 +34,7 @@ public class InteractBunny : MonoBehaviour
     public const int maxFoods = 3; //added by indra, this is to ensure a cap for collectables
 
     public PrototypeTimer pTimer;
+    ThroneGate gate;
     void Start()
     {
         //timer = GameObject.Find("Canvas").GetComponent<PrototypeTimer>();
@@ -41,6 +43,8 @@ public class InteractBunny : MonoBehaviour
         // or try below line?
         //pTimer = m_timerParent.GetComponent<PrototypeTimer>();
         pTimer.gameData.foods = 0;
+
+        gate = FindAnyObjectByType<ThroneGate>();
     }
 
     // Update is called once per frame
@@ -74,7 +78,8 @@ public class InteractBunny : MonoBehaviour
             pTimer.timeTicking = true;
 
             //UpdateFood();
-            foodText.text = "Food: " + pTimer.gameData.foods.ToString() + "/" + foodNeeded;
+            foodText.text = pTimer.gameData.foods.ToString() + "/" + foodNeeded;
+            foodObject.SetActive(true);
         }
     }
 
@@ -83,7 +88,7 @@ public class InteractBunny : MonoBehaviour
         if (pTimer.gameData.foods < maxFoods)
         {
             pTimer.gameData.foods++;
-            foodText.text = "Food: " + pTimer.gameData.foods.ToString() + "/" + foodNeeded;
+            foodText.text = pTimer.gameData.foods.ToString() + "/" + foodNeeded;
         }
     }
 
@@ -100,7 +105,7 @@ public class InteractBunny : MonoBehaviour
         // This will save game and start a new day
         // First, set food number right
         pTimer.gameData.foods -= foodNeeded;
-        foodText.text = "Food: " + pTimer.gameData.foods.ToString() + "/" + foodNeeded;
+        foodText.text = pTimer.gameData.foods.ToString() + "/" + foodNeeded;
 
         // This function will fail/throw an exception, if save file under game directory is set to
         // "readonly". When it throws exception, it will block rest of codes in this function from executing,
@@ -117,6 +122,8 @@ public class InteractBunny : MonoBehaviour
 
         //Animation stuff
         bunnyAnimator.SetTrigger("Thing");
+
+        gate.StartCoroutine(gate.MoveGateDown());
     }
 
     private IEnumerator Crossfade(float initialDelay, float dt)

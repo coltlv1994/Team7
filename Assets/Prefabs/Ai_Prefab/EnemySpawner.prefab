@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyTotal: []
+  m_puzzleManagers: []
   m_enemySpawnPoints:
   - {x: 10, y: 0, z: 0}
   - {x: 10, y: 0, z: 10}
@@ -192,10 +193,12 @@ MonoBehaviour:
   - {x: -10, y: 0, z: -10}
   - {x: 0, y: 0, z: 10}
   - {x: 0, y: 0, z: 10}
-  m_enemyPrefab: {fileID: 4692919682093856656, guid: 7b19ec4f96db3b54b94f6366c6af41aa, type: 3}
+  m_enemyPrefab: {fileID: 506400542140982038, guid: cee6afb792176e34a933fae02f793da2, type: 3}
+  BlockageOBJ: []
   m_enemyAmount: 5
   m_enemiesLeftText: {fileID: 5161016894288859371}
   m_killAllEnemiesSequence: 0
+  m_prototypeTimer: {fileID: 0}
 --- !u!65 &6145291525512865360
 BoxCollider:
   m_ObjectHideFlags: 0

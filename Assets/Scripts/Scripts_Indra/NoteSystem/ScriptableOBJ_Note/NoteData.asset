@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NoteData
   m_EditorClassIdentifier: 
   noteText: 'How did I end up here? Forced to feed the bunny day in and day out.
-    There has to be a way out though...
+    There has to be a way out...
 
 '
   numberOfPrefabsToCreate: 0

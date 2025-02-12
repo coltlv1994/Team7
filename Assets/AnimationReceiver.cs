@@ -20,6 +20,7 @@ public class AnimationReceiver : MonoBehaviour
 
     ThroneGate gate;
 
+    [SerializeField] private GameObject cutsceneBunny;
     private void Start()
     {
         cakeOGPosition = cakeImage.transform.position;
@@ -27,6 +28,8 @@ public class AnimationReceiver : MonoBehaviour
         currentMaxTime = (int)timer.maxTime;
 
         gate = FindAnyObjectByType<ThroneGate>();
+
+        cutsceneBunny.transform.localScale = gameObject.transform.localScale;
     }
 
     public void CakeMethod(int cakeAmount)
@@ -104,6 +107,7 @@ public class AnimationReceiver : MonoBehaviour
         }
         else
         {
+            Debug.Log("SHOULD WORK");
             yield return new WaitForSeconds(2.0f);
             dayText.gameObject.SetActive(false);
             timerText.gameObject.SetActive(false);
@@ -159,7 +163,7 @@ public class AnimationReceiver : MonoBehaviour
     public IEnumerator scaleUp()
     {
         Vector3 originalScale = gameObject.transform.localScale;
-        Vector3 targetScale = originalScale + new Vector3(0.2f, 0.2f, 0.2f);
+        Vector3 targetScale = originalScale + new Vector3(0.35f, 0.35f, 0.35f);
         float duration = 0.3f;
         float currentTime = 0.0f;
         //do
@@ -175,5 +179,12 @@ public class AnimationReceiver : MonoBehaviour
             currentTime += Time.deltaTime;
             yield return null;
         }
+
+        UpdateCutsceneBunny();
+    }
+
+    private void UpdateCutsceneBunny()
+    {
+        cutsceneBunny.transform.localScale = gameObject.transform.localScale;
     }
 }

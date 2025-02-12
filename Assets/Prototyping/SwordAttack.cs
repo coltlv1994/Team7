@@ -9,11 +9,19 @@ public class SwordAttack : MonoBehaviour
 
     bool canSwing = true;
 
+    [SerializeField] AudioClip crateSound;
+    [SerializeField] AudioClip hitSound;
+    [SerializeField] AudioClip enemySound;
+
+    private ParticleSystem swordSlash;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         weaponcCollider = GetComponent<Collider>();
         weaponcCollider.enabled = false;
+
+        swordSlash = transform.parent.GetComponentInChildren<ParticleSystem>();
     }
     private void Update()
     {
@@ -24,6 +32,7 @@ public class SwordAttack : MonoBehaviour
             Debug.Log("Yo");
             animator.SetTrigger("Swing");
             canSwing = false;
+            swordSlash.Play();
         }
 
     }
@@ -58,17 +67,32 @@ public class SwordAttack : MonoBehaviour
           CapsuleCollider capsuleCollider = other.GetComponent<CapsuleCollider>();
             if (other == capsuleCollider)
             {
+                AudioSource source = other.GetComponent<AudioSource>();
+
                 if (collidedEnemy.m_lungingAtPlayer)
                 { 
                     if(!collidedEnemy.stopTime && !collidedEnemy.startTime) collidedEnemy.stopTime = true;
                     if (collidedEnemy.StunStopping == false)
                     {
                         collidedEnemy.TakingDamage(damageAmount);
+
+                        
+                        if (source != null)
+                        {
+                            source.PlayOneShot(hitSound);
+                            source.PlayOneShot(enemySound);
+                        }
                     }
                 }
                 else
                 {
                     collidedEnemy.TakingDamage(damageAmount);
+
+                    if (source != null)
+                    {
+                        source.PlayOneShot(hitSound);
+                        source.PlayOneShot(enemySound);
+                    }
                 }
             }
         }
@@ -83,7 +107,11 @@ public class SwordAttack : MonoBehaviour
 
             other.GetComponent<Rigidbody>().AddForce(400 * direction);
 
-            
+            AudioSource source = other.GetComponent<AudioSource>();
+            if (source != null)
+            {
+                source.PlayOneShot(crateSound);
+            }
         }
     }
 }

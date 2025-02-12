@@ -192,7 +192,7 @@ public class PrototypeTimer : MonoBehaviour
         {
             TimeOver();
         }
-        timerText.text = "Time remaining: " + time.ToString("F2");
+        timerText.text = "Bunny Patience: " + time.ToString("F2");
         dayText.text = "Day " + gameData.day;
     }
 
