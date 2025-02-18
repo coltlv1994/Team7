@@ -33,8 +33,8 @@ public class CS_DangerousTouch : MonoBehaviour // Created by Elliot
 
     private IEnumerator TakingDangerousTouchDamage()
     {
-        if(m_playerHealthbar.currentHealth <= 0) StopCoroutine(TakingDangerousTouchDamage());
-        m_playerHealthbar.TakeDamage(m_damageDealPerHalfSecond, this.transform.position, false);
+        //if(m_playerHealthbar.currentHealth <= 0) StopCoroutine(TakingDangerousTouchDamage());
+        m_playerHealthbar.TakeDamage(this.transform.position, false);
         yield return new WaitForSeconds(0.5f);
         if(!m_isOutSideDangerous) StartCoroutine(TakingDangerousTouchDamage());
     }

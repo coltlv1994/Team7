@@ -1,4 +1,5 @@
 // Created by Linus JernstrÃ¶m
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Interactables
@@ -24,12 +25,12 @@ namespace Interactables
 
                 
             }
-            else
+            else if (isSupaFood)
             {
                 interactBunny.increaseTimer = true;
                 interactBunny.supaCarrotCount++;
                 audioManager.PlaySFX(foodSound);
-                Destroy(this.gameObject);
+                Destroy(this.gameObject); //remove this or else carrots destroy themselves even if you have 3
             }
 
         }

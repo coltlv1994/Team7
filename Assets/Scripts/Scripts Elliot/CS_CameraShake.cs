@@ -84,21 +84,21 @@ public class CS_CameraShake : MonoBehaviour //Created by Elliot
 
         if(wantShakingWithTimer)
         {
-            if (m_timer.time > (m_timer.maxTime / 2)) { m_isActiveShake = false; m_shakeAmount = 0f; }
+            if (m_timer.time > (m_timer.gameData.max_time / 2)) { m_isActiveShake = false; m_shakeAmount = 0f; }
             else m_isActiveShake = true;
-            if (m_timer.time <= (m_timer.maxTime / 2))
+            if (m_timer.time <= (m_timer.gameData.max_time / 2))
             {
                 m_shakeAmount++;
                 if (m_shakeAmount >= 0.05) m_shakeAmount = 0.05f;
             }
 
-            if (m_timer.time <= (m_timer.maxTime / 5))
+            if (m_timer.time <= (m_timer.gameData.max_time / 5))
             {
                 m_shakeAmount++;
                 if (m_shakeAmount >= 0.1) m_shakeAmount = 0.1f;
             }
 
-            if (m_timer.time <= (m_timer.maxTime / 10))
+            if (m_timer.time <= (m_timer.gameData.max_time / 10))
             {
                 m_shakeAmount++;
                 if (m_shakeAmount >= 0.15) m_shakeAmount = 0.15f;

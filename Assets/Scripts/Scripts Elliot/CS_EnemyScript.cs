@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.ProBuilder.MeshOperations;
+using UnityEngine.UIElements;
 using static CS_RespawnCheck;
 using static UnityEngine.GraphicsBuffer;
 
@@ -61,6 +62,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     Animator enemyAnimtor;
     GameObject m_lookAtPlayerPivotPrefab;
     public GameObject ItemEnemyDrops;
+    PrototypeTimer m_protoTypeTimer;
+    InteractBunny m_interactBunny;
 
     [Header("WhatAIDoing")]
     public EnemyState state = 0;
@@ -68,7 +71,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     private void Start()
     {
         m_playerOBJ = GameObject.FindGameObjectWithTag("Player");
-        m_healthbar = GameObject.Find("PlayerHealthBar").GetComponent<CS_PlayerHealthbar>();
+        m_healthbar = GameObject.Find("HealthCanvas").GetComponent<CS_PlayerHealthbar>();
+        m_interactBunny = m_playerOBJ.GetComponent<InteractBunny>();
         m_enemyCurrentHealth = m_enemyMaxHealth;
         m_playerScript = m_playerOBJ.GetComponent<FPSController>();
         m_meshrenders = GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -79,6 +83,8 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
         enemyAnimtor = GetComponent<Animator>();
         m_lookAtPlayerPivotPrefab = GameObject.Find("LookingAtPlayerPivot");
         m_pivotObject = this.gameObject.transform.GetChild(0).gameObject;
+        m_protoTypeTimer = FindAnyObjectByType<PrototypeTimer>();
+
         state = EnemyState.SpawningState;
         timeScaler = 1f;
         enemyAnimtor.SetTrigger("Spawn");
@@ -313,8 +319,47 @@ public class CS_EnemyScript : MonoBehaviour //Created by Elliot //Still being wo
     {
         enemyAnimtor.SetTrigger("Attack_Bite");
         m_canGiveDamage = false;
-        m_healthbar.TakeDamage(m_enemyDamage, this.transform.position, true);
+        m_healthbar.TakeDamage(this.transform.position, true);
         m_playerScript.KnockBack();
+        uint looseHowManyCarrots = 1;
+        if (m_protoTypeTimer.gameData.foods > 0)
+        {
+            m_protoTypeTimer.gameData.foods -= looseHowManyCarrots;
+            m_interactBunny.foodText.text = m_interactBunny.pTimer.gameData.foods.ToString() + "/" + m_interactBunny.foodNeeded;
+            if (m_protoTypeTimer.gameData.foods >= 1000) m_protoTypeTimer.gameData.foods = 0;
+            for (int i = 0; i < looseHowManyCarrots; i++)
+            {
+                GameObject droppedCarrot = Instantiate(ItemEnemyDrops, new Vector3(m_playerScript.gameObject.transform.position.x, m_playerScript.gameObject.transform.position.y + 1 , m_playerScript.gameObject.transform.position.z), quaternion.identity);
+                droppedCarrot.transform.Rotate(Vector3.right * 90);
+                BoxCollider carrotCollider = droppedCarrot.GetComponent<BoxCollider>();
+                carrotCollider.isTrigger = false;
+
+                Rigidbody carrotRigidBody = droppedCarrot.AddComponent<Rigidbody>();
+                carrotRigidBody.useGravity = true;
+                carrotRigidBody.freezeRotation = true;
+
+                var randomSpawnSpot = UnityEngine.Random.Range(0, 3);
+                switch(randomSpawnSpot)
+                {
+                   case 0:
+                        carrotRigidBody.AddForce(transform.right * 1f, ForceMode.Impulse);
+                        break;
+                   case 1:
+                        carrotRigidBody.AddForce(-transform.right * 1f, ForceMode.Impulse);
+                        break;
+                   case 2:
+                        carrotRigidBody.AddForce(-transform.up * 1f, ForceMode.Impulse);
+                        break;
+                    default: break;
+                }
+                yield return new WaitForSeconds(5f);
+                if(carrotCollider && carrotRigidBody != null)
+                {
+                    carrotCollider.isTrigger = true;
+                    Destroy(carrotRigidBody);
+                }
+            }
+        }
         yield return new WaitForSeconds(5f);
     }
 

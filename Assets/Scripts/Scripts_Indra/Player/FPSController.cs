@@ -3,9 +3,10 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.UIElements.Experimental;
+using System.Collections;
+
 //using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
 [RequireComponent(typeof(CharacterController))]
@@ -61,6 +62,7 @@ public class FPSController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged; 
+        GameStateManager.Instance.SetState(GameState.Play);
     }
 
     private void OnDestroy()
@@ -70,6 +72,8 @@ public class FPSController : MonoBehaviour
     private void OnGameStateChanged(GameState newState)
     {
         enabled = newState == GameState.Play;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = newState != GameState.Play;
     }
     #endregion
     void Start()

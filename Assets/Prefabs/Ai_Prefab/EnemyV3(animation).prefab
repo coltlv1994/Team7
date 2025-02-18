@@ -92,7 +92,7 @@ MonoBehaviour:
   raycastToGround: 0.2
   m_enemyDamage: 20
   m_enemyCurrentHealth: 0
-  m_enemyMaxHealth: 100
+  m_enemyMaxHealth: 30
   m_canJuggleEnemy: 1
   m_enemyKnockbackForce: 5
   ItemEnemyDrops: {fileID: 5672820376004276550, guid: df2212939872c214c89ff224cadfc619, type: 3}

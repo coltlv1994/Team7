@@ -33,7 +33,7 @@ public class CameraShake : MonoBehaviour
             transform.localPosition = initialPosition + Random.insideUnitSphere * shakeAmount;
         }
 
-        if (m_timer != null && m_timer.time < (m_timer.maxTime / 2))
+        if (m_timer != null && m_timer.time < (m_timer.gameData.max_time / 2))
         {
             if (!hasShaken1)
             {
@@ -43,7 +43,7 @@ public class CameraShake : MonoBehaviour
                 audioManager.PlaySFX(tickTock);
             }
 
-            if (m_timer != null && m_timer.time < ((m_timer.maxTime / 2) / 2))
+            if (m_timer != null && m_timer.time < ((m_timer.gameData.max_time / 2) / 2))
             {
                 if (!hasShaken2)
                 {

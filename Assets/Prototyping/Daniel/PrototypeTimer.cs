@@ -14,7 +14,6 @@ using System.Linq;
 //Made by Daniel
 public class PrototypeTimer : MonoBehaviour
 {
-    [SerializeField] public uint maxTime = 15;
     [SerializeField] public float time;
     public bool timeTicking;
     public GameSettingsPersistent settings;
@@ -30,7 +29,10 @@ public class PrototypeTimer : MonoBehaviour
 
     public List<GameObject> m_crateOBJS;
     public List<Vector3> m_crateLocations;
-
+    
+    //Linus's gameover
+    [SerializeField] private GameObject gameOverUI;
+    
     void Awake()
     {
         // create game data
@@ -160,16 +162,8 @@ public class PrototypeTimer : MonoBehaviour
         if (settings == null)
         {
             settings = gameObject.AddComponent<GameSettingsPersistent>();
+            settings.tag = "GlobalSettings";
             // NOTE: this line is for debugging purpose and should be removed before final build.
-            settings.isLoadingSave = true;
-        }
-
-
-        if (File.Exists(savePath) && settings.isLoadingSave == true)
-        {
-            // load from save
-            ReadFromSave();
-            settings.isLoadingSave = false;
         }
 
         if (File.Exists(savePath) && settings.isLoadingSave == false)
@@ -178,7 +172,14 @@ public class PrototypeTimer : MonoBehaviour
             File.Delete(savePath);
         }
 
-        time = maxTime;
+        if (File.Exists(savePath) && settings.isLoadingSave == true)
+        {
+            // load from save
+            ReadFromSave();
+            settings.isLoadingSave = false;
+        }
+
+        time = gameData.max_time;
         timerText = GameObject.Find("TimerUI").GetComponent<TMP_Text>();
         dayText = GameObject.Find("DayUI").GetComponent<TMP_Text>();
     }
@@ -208,16 +209,20 @@ public class PrototypeTimer : MonoBehaviour
 
     private void TimeOver()
     {
-        print("Time Out");
-        settings.isLoadingSave = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        gameOverUI.gameObject.SetActive(true);
+        if (GameStateManager.Instance != null)
+            GameStateManager.Instance.SetState(GameState.GameOver);
+        
+        //print("Time Out");
+        //settings.isLoadingSave = true;
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void NewDay()
     {
         print("Mmm! Such food you have brought me, now get back in there or I will eat you!");
         gameData.day += 1;
-        time = maxTime;
+        time = gameData.max_time;
         SaveGame(); // autosave
 
         _dialogueManager.RunDialogue(Mathf.CeilToInt(gameData.day));

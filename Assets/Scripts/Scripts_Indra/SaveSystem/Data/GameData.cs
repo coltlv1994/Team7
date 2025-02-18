@@ -1,7 +1,7 @@
 //Indra
 using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
+
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UIElements;
@@ -14,6 +14,7 @@ public class GameData
 
     public uint day = 1;
     public uint foods = 0;
+    public float max_time = 140.0f;
     //the values defined here will be the default values 
     //that the game starts with on a new game (when theres no data to load)
 
@@ -31,6 +32,11 @@ public class GameData
         {
             foods = Convert.ToUInt32(outValue);
         }
+
+        if (p_dict.TryGetValue("max_time", out outValue))
+        {
+            max_time = Convert.ToSingle(outValue);
+        }
     }
 
     public Dictionary<string, string> WriteToDict()
@@ -39,6 +45,7 @@ public class GameData
 
         p_dict["day"] = day.ToString();
         p_dict["foods"] = foods.ToString();
+        p_dict["max_time"] = max_time.ToString();
 
         return p_dict;
     }

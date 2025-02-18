@@ -25,7 +25,7 @@ public class AnimationReceiver : MonoBehaviour
     {
         cakeOGPosition = cakeImage.transform.position;
         cakeImage.transform.gameObject.SetActive(false);
-        currentMaxTime = (int)timer.maxTime;
+        currentMaxTime = (int)timer.gameData.max_time;
 
         gate = FindAnyObjectByType<ThroneGate>();
 
@@ -144,9 +144,9 @@ public class AnimationReceiver : MonoBehaviour
         }
         timerTransform.localScale = targetScale;
 
-        timerText.text = "Max Time: " + ((int)timer.maxTime + (cakeNumber * 20));
+        timerText.text = "Max Time: " + ((int)timer.gameData.max_time + (cakeNumber * 20));
         cakeNumber = 0;
-        currentMaxTime = (int)timer.maxTime;
+        currentMaxTime = (int)timer.gameData.max_time;
 
         elapsedTime = 0;
         while (elapsedTime < duration)
