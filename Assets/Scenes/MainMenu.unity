@@ -9196,7 +9196,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0ef435dc5bfb44fbbb9194f75527d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  crossFade: {fileID: 0}
   timer: {fileID: 0}
+  dayText: {fileID: 0}
+  timerText: {fileID: 0}
+  cakeImage: {fileID: 0}
+  timerTransform: {fileID: 0}
+  hasCake: 0
+  cutsceneBunny: {fileID: 0}
 --- !u!1 &932717055
 GameObject:
   m_ObjectHideFlags: 0
@@ -17370,7 +17377,7 @@ PrefabInstance:
     - target: {fileID: 5888919293176804667, guid: 870a71e45518c7647989b4d226b7832b, type: 3}
       propertyPath: loadGameConfirmation
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 71196629}
     - target: {fileID: 6075319140305863359, guid: 870a71e45518c7647989b4d226b7832b, type: 3}
       propertyPath: m_IsActive
       value: 1
