@@ -21,13 +21,13 @@ public class End : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            StartCoroutine(CrossFadeLerpWhite(3.5f));
-        }
+        //if (other.CompareTag("Player"))
+        //{
+        //    StartCoroutine(CrossFadeLerpWhite(3.5f));
+        //}
     }
 
-    private IEnumerator CrossFadeLerpWhite(float duration)
+    public IEnumerator CrossFadeLerpWhite(float duration)
     {
         float elapsedTime = 0;
         Color startColor = crossFadeWhite.color;

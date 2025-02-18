@@ -46,8 +46,8 @@ public class CS_EnemyManager : MonoBehaviour
         if (m_killAllEnemiesSequence) //This might be heavy for the PC, pay attention to FPS counter in unity to see if it is heavy
         {
             m_prototypeTimer.timeTicking = false;
-            m_enemiesLeftText.gameObject.SetActive(true);
-            m_enemiesLeftText.text = "Enemies left:" + " " + m_enemyTotal.Count;
+            //m_enemiesLeftText.gameObject.SetActive(true);
+            //m_enemiesLeftText.text = "Enemies left:" + " " + m_enemyTotal.Count;
 
             for (int i = 0; i < m_enemyTotal.Count; i++)
             {
@@ -63,7 +63,7 @@ public class CS_EnemyManager : MonoBehaviour
                 }
             }
         }
-        else { m_enemiesLeftText.gameObject.SetActive(false); }
+        //else { m_enemiesLeftText.gameObject.SetActive(false); }
 
         if(m_enemyTotal.Count <= 0 && m_killAllEnemiesSequence) 
         {

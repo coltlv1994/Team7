@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 public class CS_PlayerHealthbar : MonoBehaviour //Created by Elliot
 {
-    [SerializeField] Slider m_Slider;
-    public int maxHealth;
-    public int currentHealth;
-    public GameObject playerOBJ;
-    public CharacterController characterController;
+    //[SerializeField] Slider m_Slider;
+   //public int maxHealth;
+    //public int currentHealth;
+    //public GameObject playerOBJ;
+   //public CharacterController characterController;
     public Transform m_respawnLocation;
 
     public GameObject m_takingDamageOBJ;
@@ -17,17 +17,17 @@ public class CS_PlayerHealthbar : MonoBehaviour //Created by Elliot
     public float m_speedOfFading = 30f;
 
     [SerializeField] CS_DamageIndicatorUI m_damageIndicator;
-    public CS_RespawnCheck CS_RespawnCheck;
+    //public CS_RespawnCheck CS_RespawnCheck;
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        //currentHealth = maxHealth;
         m_colorChanger = m_takingDamageOBJ.GetComponent<RawImage>();
     }
 
-    public void TakeDamage(int amount, Vector3 damagePositon, bool needIndicator)
+    public void TakeDamage(Vector3 damagePositon, bool needIndicator)
     {
-        currentHealth -= amount;
+        //currentHealth -= amount;
 
         if(needIndicator)
         {
@@ -37,29 +37,29 @@ public class CS_PlayerHealthbar : MonoBehaviour //Created by Elliot
         }
 
         m_takingDamageOBJ.SetActive(true);
-        m_Slider.value = currentHealth / maxHealth;
-        if (currentHealth <= 0)
-        {
-            characterController.enabled = false;
-            CS_RespawnCheck.Respawn();
-            CS_RespawnCheck.OnlyRespawnOnce = false;
-            characterController.enabled = true;
-            currentHealth = maxHealth;
-            print("Player Has Died");
-        }
-        else characterController.enabled = true;
+        //m_Slider.value = currentHealth / maxHealth;
+        //if (currentHealth <= 0)
+        //{
+        //    characterController.enabled = false;
+        //    CS_RespawnCheck.Respawn();
+        //    CS_RespawnCheck.OnlyRespawnOnce = false;
+        //    characterController.enabled = true;
+        //    currentHealth = maxHealth;
+        //    print("Player Has Died");
+        //}
+        //else characterController.enabled = true;
         
     }
 
-    public void UpdateFixedHealtBar(int currentValue, int maxValue)
-    {
-        m_Slider.value = currentValue / maxValue;
-    }
+    //public void UpdateFixedHealtBar(int currentValue, int maxValue)
+    //{
+    //    m_Slider.value = currentValue / maxValue;
+    //}
 
     void Update()
     {
         TakingDamageEffect();
-        m_Slider.value = currentHealth;
+        //m_Slider.value = currentHealth;
     }
     private void TakingDamageEffect()
     {

@@ -12,6 +12,7 @@ public class SwordAttack : MonoBehaviour
     [SerializeField] AudioClip crateSound;
     [SerializeField] AudioClip hitSound;
     [SerializeField] AudioClip enemySound;
+    [SerializeField] AudioClip enemyDeathSound;
 
     private ParticleSystem swordSlash;
 
@@ -74,24 +75,29 @@ public class SwordAttack : MonoBehaviour
                     if(!collidedEnemy.stopTime && !collidedEnemy.startTime) collidedEnemy.stopTime = true;
                     if (collidedEnemy.StunStopping == false)
                     {
-                        collidedEnemy.TakingDamage(damageAmount);
-
-                        
                         if (source != null)
                         {
                             source.PlayOneShot(hitSound);
                             source.PlayOneShot(enemySound);
+
+                            if(collidedEnemy.m_enemyCurrentHealth == 10)
+                            {
+                                source.PlayOneShot(enemyDeathSound);
+                            }
                         }
+                        collidedEnemy.TakingDamage(damageAmount);
+
+                        
                     }
                 }
                 else
                 {
-                    collidedEnemy.TakingDamage(damageAmount);
+                    source.PlayOneShot(hitSound);
+                    source.PlayOneShot(enemySound);
 
-                    if (source != null)
+                    if (collidedEnemy.m_enemyCurrentHealth == 10)
                     {
-                        source.PlayOneShot(hitSound);
-                        source.PlayOneShot(enemySound);
+                        source.PlayOneShot(enemyDeathSound);
                     }
                 }
             }

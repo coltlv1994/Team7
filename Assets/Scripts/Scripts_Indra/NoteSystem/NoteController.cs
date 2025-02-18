@@ -6,6 +6,9 @@ using Interactables;
 using System.Threading;
 public class NoteController : CS_InteractableObject
 {
+    [SerializeField]
+    private PauseController pauseController;
+
     [Header("Input")]
     [SerializeField] private KeyCode closeKey;
 
@@ -23,7 +26,7 @@ public class NoteController : CS_InteractableObject
 
     [Space(10)]
     [SerializeField] private UnityEvent openEvent;
-    //private bool isOpen = false; // redundant
+    ////private bool isopen = false; // redundant
 
     AudioManager audioManager;
     [SerializeField] AudioClip noteSound;
@@ -52,6 +55,9 @@ public class NoteController : CS_InteractableObject
         noteCanvas.SetActive(true);
         openEvent.Invoke();
         DisablePlayer(true);
+        pauseController = GameObject.FindAnyObjectByType<PauseController>();
+        pauseController.enabled = false;
+
         //isOpen = true; // redundant
 
         if (protoTimer != null) 
@@ -65,6 +71,8 @@ public class NoteController : CS_InteractableObject
     {
         noteCanvas.SetActive(false);
         DisablePlayer(false);
+        pauseController = GameObject.FindAnyObjectByType<PauseController>();
+        pauseController.enabled = true;
         // isOpen = false; // redundant
         if (protoTimer != null)
         {
@@ -96,12 +104,7 @@ public class NoteController : CS_InteractableObject
 
     private void Update()
     {
-        //if (isOpen) 
-        //{
-        //    if (Input.GetKeyDown(closeKey)) 
-        //    {
-        //        DisableNote();
-        //    }
-        //}
+
     }
 }
+

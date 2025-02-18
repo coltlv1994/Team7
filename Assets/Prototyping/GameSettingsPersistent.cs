@@ -8,6 +8,6 @@ public class GameSettingsPersistent : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject); //I commented this out because the canvas kept overlaying every time player dies and resets
     }
 }

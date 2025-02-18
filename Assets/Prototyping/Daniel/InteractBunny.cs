@@ -14,7 +14,7 @@ public class InteractBunny : MonoBehaviour
     // Should you have any questions, contact Zhengyang
 
     [SerializeField] LayerMask layerMask;
-    [SerializeField] private uint interactRange, foodNeeded;
+    [SerializeField] public uint interactRange, foodNeeded;
     public GameObject m_saveWindow;
     // not sure if it is needed
     public GameObject m_timerParent;
@@ -26,7 +26,7 @@ public class InteractBunny : MonoBehaviour
     Animator bunnyAnimator;
 
     [SerializeField] GameObject foodObject;
-    [SerializeField] TextMeshProUGUI foodText;
+    [SerializeField] public TextMeshProUGUI foodText;
 
     /*[System.NonSerialized]*/ public bool increaseTimer;
     public int supaCarrotCount;
@@ -96,7 +96,7 @@ public class InteractBunny : MonoBehaviour
     {
         if (increaseTimer)
         {
-            pTimer.maxTime += (uint)(supaCarrotCount * 20);
+            pTimer.gameData.max_time += (uint)(supaCarrotCount * 20);
             AnimationReceiver animRec = FindAnyObjectByType<AnimationReceiver>();
             animRec.hasCake = true;
 

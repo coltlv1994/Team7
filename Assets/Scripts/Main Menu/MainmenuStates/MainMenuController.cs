@@ -89,11 +89,11 @@ public class MainMenuController : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    private void LoadGame()
+    public void LoadGame()
     {
         //player prefas to load saved scene data
         settings.GetComponent<GameSettingsPersistent>().isLoadingSave = true;
-        SceneManager.LoadScene(newGameStart);
+        SceneManager.LoadScene(1);
 
 
         // start new game as normal
